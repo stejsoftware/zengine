@@ -28,12 +28,6 @@ public class StoryList extends ArrayList<Story>
         }
     }
 
-    @Override
-    public String toString()
-    {
-        return "StoryList";
-    }
-
     public Story find(String id)
     {
         Story story = null;

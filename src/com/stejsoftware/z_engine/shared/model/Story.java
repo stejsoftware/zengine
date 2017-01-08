@@ -32,5 +32,10 @@ public class Story extends BaseModel
         return get(STORY_ID, "-");
     }
 
+    public String toString()
+    {
+        return String.format("%s: %s", id(), name());
+    }
+
     private static final long serialVersionUID = 8588303284215870299L;
 }

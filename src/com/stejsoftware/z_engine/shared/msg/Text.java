@@ -59,9 +59,29 @@ public class Text extends Message
         return m_text;
     }
 
-    public String get_text()
+    public String getText()
     {
         return get().replace("\n>", "\n");
+    }
+
+    public int getForground()
+    {
+        return m_forground;
+    }
+
+    public int getBackground()
+    {
+        return m_background;
+    }
+
+    public int getStyle()
+    {
+        return m_style;
+    }
+
+    public int getFont()
+    {
+        return m_font;
     }
 
     @Override

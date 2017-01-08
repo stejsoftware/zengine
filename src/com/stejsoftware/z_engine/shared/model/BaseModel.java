@@ -4,6 +4,8 @@
 package com.stejsoftware.z_engine.shared.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author jon
@@ -12,30 +14,26 @@ import java.io.Serializable;
 
 public class BaseModel implements Serializable
 {
-    private static final long serialVersionUID = -3297867173842587108L;
 
-    Object                    value            = null;
+    Map<String, String> map = new HashMap<String, String>();
 
-    protected void set(String key, Object value)
+    protected void set(String key, String value)
     {
-        this.value = value;
+        map.put(key, value);
     }
 
-    @SuppressWarnings("unchecked")
-    protected <T> T get(String key, T value)
+    protected void set(String key, byte[] value)
     {
-        T v;
+        map.put(key, value.toString());
+    }
 
-        if( null != this.value )
+    protected String get(String key, String value)
+    {
+        String v;
+
+        if( map.containsKey(key) )
         {
-            try
-            {
-                v = (T) this.value;
-            }
-            catch( Exception ex )
-            {
-                v = value;
-            }
+            v = map.get(key);
         }
         else
         {
@@ -49,4 +47,6 @@ public class BaseModel implements Serializable
     {
         return new byte[0];
     }
+
+    private static final long serialVersionUID = -3297867173842587108L;
 }

@@ -16,4 +16,5 @@ repositories {
 
 dependencies {
     compile 'org.mortbay.jetty:jetty-sslengine:6.1.26'
+    compile 'org.slf4j:slf4j-simple:1.7.22'
 }
