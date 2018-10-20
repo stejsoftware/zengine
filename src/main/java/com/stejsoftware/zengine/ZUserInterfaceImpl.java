@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.stejsoftware.zengine;
 
@@ -15,7 +15,6 @@ import com.zaxsoft.zmachine.ZUserInterface;
 
 /**
  * @author jon
- *
  */
 public class ZUserInterfaceImpl implements ZUserInterface {
     private static Logger log = LoggerFactory.getLogger(ZUserInterfaceImpl.class);
@@ -46,8 +45,7 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * @see com.zaxsoft.zmachine.ZUserInterface#setTerminatingCharacters(java.util.
-     *      Vector)
+     * @see com.zaxsoft.zmachine.ZUserInterface#setTerminatingCharacters(java.util.Vector)
      */
     @Override
     public void setTerminatingCharacters(Vector<Integer> chars) {
@@ -63,8 +61,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#hasUpperWindow()
      */
     @Override
@@ -73,8 +69,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#defaultFontProportional()
      */
     @Override
@@ -83,8 +77,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#hasColors()
      */
     @Override
@@ -93,8 +85,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#hasBoldface()
      */
     @Override
@@ -103,8 +93,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#hasItalic()
      */
     @Override
@@ -113,8 +101,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#hasFixedWidth()
      */
     @Override
@@ -123,8 +109,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#hasTimedInput()
      */
     @Override
@@ -133,8 +117,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#getScreenCharacters()
      */
     @Override
@@ -143,8 +125,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#getScreenUnits()
      */
     @Override
@@ -153,8 +133,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#getFontSize()
      */
     @Override
@@ -163,8 +141,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#getWindowSize(int)
      */
     @Override
@@ -173,8 +149,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#getDefaultForeground()
      */
     @Override
@@ -183,8 +157,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#getDefaultBackground()
      */
     @Override
@@ -193,8 +165,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#getCursorPosition()
      */
     @Override
@@ -203,10 +173,8 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#showStatusBar(java.lang.String, int,
-     *      int, boolean)
+     * int, boolean)
      */
     @Override
     public void showStatusBar(String s, int a, int b, boolean flag) {
@@ -214,8 +182,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     *
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#splitScreen(int)
      */
     @Override
@@ -225,8 +191,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#setCurrentWindow(int)
      */
     @Override
@@ -235,8 +199,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     *
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#setCursorPosition(int, int)
      */
     @Override
@@ -246,8 +208,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#setColor(int, int)
      */
     @Override
@@ -257,8 +217,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#setTextStyle(int)
      */
     @Override
@@ -267,8 +225,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#setFont(int)
      */
     @Override
@@ -277,10 +233,8 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#readLine(java.lang.StringBuffer,
-     *      int)
+     * int)
      */
     @Override
     public int readLine(StringBuffer sb, int time) {
@@ -292,8 +246,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#readChar(int)
      */
     @Override
@@ -304,8 +256,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#showString(java.lang.String)
      */
     @Override
@@ -314,8 +264,6 @@ public class ZUserInterfaceImpl implements ZUserInterface {
     }
 
     /**
-     * 
-     * 
      * @see com.zaxsoft.zmachine.ZUserInterface#scrollWindow(int)
      */
     @Override
@@ -341,7 +289,7 @@ public class ZUserInterfaceImpl implements ZUserInterface {
 
     /**
      * @see com.zaxsoft.zmachine.ZUserInterface#getFilename(java.lang.String,
-     *      java.lang.String, boolean)
+     * java.lang.String, boolean)
      */
     @Override
     public String getFilename(String title, String suggested, boolean saveFlag) {

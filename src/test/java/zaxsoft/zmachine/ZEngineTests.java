@@ -16,7 +16,6 @@ import static org.junit.Assert.assertThat;
  * @author jon
  */
 
-@
 public class ZEngineTests {
     private static final Logger LOG = LoggerFactory.getLogger(ZEngineTests.class);
 
