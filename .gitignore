@@ -29,3 +29,6 @@
 /nbdist/
 /.nb-gradle/
 /archive
+
+# spring
+application-local.yml
