@@ -104,7 +104,7 @@ public class Game {
     }
 
     public Integer getVersion() {
-        return memory.readByte(0x0);
+        return memory.readByte(0x0).intValue();
     }
 
     public Integer getRevision() {
@@ -116,6 +116,5 @@ public class Game {
                 .stream()
                 .map(c -> Character.toString((char) c.byteValue()))
                 .collect(Collectors.joining());
-
     }
 }
