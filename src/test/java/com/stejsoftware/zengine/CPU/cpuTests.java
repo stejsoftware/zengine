@@ -36,7 +36,7 @@ public class cpuTests {
         Game game = Game.fromStoryFile("C:\\Projects\\zengine\\archive\\zork1.z3");
 
         assertThat(game.getVersion(), is(3));
-        assertThat(game.getRevision(), is("88"));
+        assertThat(game.getRevision(), is(88));
         assertThat(game.getSerialNumber(), is("840726"));
         assertThat(game.getGameScore(), is(0));
         assertThat(game.getTurnsTaken(), is(0));

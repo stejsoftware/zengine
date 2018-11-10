@@ -3,6 +3,7 @@ logging:
         web: INFO
 
 spring:
+    profiles.active: local
     data:
         mongodb:
             uri: mongodb+srv://set.with.mongodb.com

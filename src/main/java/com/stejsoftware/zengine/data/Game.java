@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Document(collection = "Games")
 public class Game {
@@ -103,14 +104,18 @@ public class Game {
     }
 
     public Integer getVersion() {
-        return this.memory.read(0).intValue();
+        return memory.readByte(0x0);
     }
 
-    public String getRevision() {
-        return "88";
+    public Integer getRevision() {
+        return memory.readWord(0x2);
     }
 
     public String getSerialNumber() {
-        return "840726";
+        return memory.readBytes(0x12, 6)
+                .stream()
+                .map(c -> Character.toString((char) c.byteValue()))
+                .collect(Collectors.joining());
+
     }
 }
