@@ -6,6 +6,7 @@ package zaxsoft.zmachine;
 import com.stejsoftware.zengine.ZUserInterfaceImpl;
 import com.zaxsoft.zmachine.ZCPU;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,7 @@ public class ZEngineTests {
     private static final Logger LOG = LoggerFactory.getLogger(ZEngineTests.class);
 
     @Test
+    @Ignore
     public void cpuTest() {
         ZCPU cpu = new ZCPU(new ZUserInterfaceImpl());
 
