@@ -1,6 +1,6 @@
 logging:
     level:
-        web: INFO
+        web: DEBUG
 
 spring:
     profiles.active: local

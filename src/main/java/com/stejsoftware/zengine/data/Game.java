@@ -5,7 +5,7 @@ import com.stejsoftware.zengine.processor.Move;
 import com.stejsoftware.zengine.processor.ProgramCounter;
 import com.stejsoftware.zengine.processor.Stack;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+//import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Document(collection = "Games")
+//@Document(collection = "Games")
 public class Game {
     @Id
     private Integer id;

@@ -1,8 +1,6 @@
 package com.stejsoftware.zengine.processor;
 
-public class Address {
+public interface Address {
 
-    public Integer value() {
-        return 0x1234;
-    }
+    Short get();
 }

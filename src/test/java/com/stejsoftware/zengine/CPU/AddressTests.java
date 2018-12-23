@@ -1,6 +1,7 @@
 package com.stejsoftware.zengine.CPU;
 
 import com.stejsoftware.zengine.processor.Address;
+import com.stejsoftware.zengine.processor.ByteAddress;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,9 +14,10 @@ import static org.junit.Assert.assertThat;
 @SpringBootTest
 public class AddressTests {
     @Test
-    public void name() {
-        Address a = new Address();
+    public void byteAddress() {
 
-        assertThat(a.value(), is(0x1234));
+        Address address = new ByteAddress((short) 0x1234);
+        assertThat(address.get(), is((short) 0x1234));
     }
 }
+

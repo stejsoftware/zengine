@@ -9,16 +9,13 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class Zmachine {
-    Zmachine() {
-        System.out.println(">>>> Start <<<<");
+    private ZCPU cpu = new ZCPU(new UI());
 
-        ZCPU cpu = new ZCPU(new UI());
-
+    private Zmachine() {
         cpu.initialize("minizork.z3");
         cpu.start();
-        // cpu.run();
 
-        System.out.println(">>>> Stop <<<<");
+        while (cpu.is_running()) ;
     }
 
     public static void main(String[] args) {
@@ -194,7 +191,7 @@ public class Zmachine {
         @Override
         public void quit() {
             System.out.printf("[done]\n");
-            System.exit(0);
+            cpu.stop();
         }
 
         @Override

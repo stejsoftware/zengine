@@ -1,14 +1,17 @@
 package com.stejsoftware.zengine.controller;
 
-import org.springframework.stereotype.Controller;
+import com.stejsoftware.zengine.data.Output;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class ZEngineController {
 
-    @PostMapping("/input")
-    public String input(String comand) {
-        return "greeting";
+    @PostMapping(value = "/input")
+    public Output input(@RequestBody Object command) {
+        Output output = new Output();
+        output.setName(command.toString());
+        return output;
     }
-
 }
