@@ -1,11 +1,12 @@
 /**
  *
  */
-package com.stejsoftware.zengine.CPU;
+package com.stejsoftware.zengine.zmachine;
 
 import com.stejsoftware.zengine.data.Game;
-import com.stejsoftware.zengine.processor.CPU;
+import com.stejsoftware.zengine.zmachine.processor.CPU;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -44,6 +45,7 @@ public class cpuTests {
     }
 
     @Test
+    @Ignore
     public void cpu02ExecuteTest() {
         Game game = Game.fromStoryFile("C:\\Projects\\zengine\\archive\\zork1.z3");
 

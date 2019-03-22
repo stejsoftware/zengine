@@ -1,9 +1,8 @@
 /**
  *
  */
-package zaxsoft.zmachine;
+package com.stejsoftware.zengine;
 
-import com.stejsoftware.zengine.ZUserInterfaceImpl;
 import com.zaxsoft.zmachine.ZCPU;
 import org.junit.Test;
 import org.junit.Ignore;

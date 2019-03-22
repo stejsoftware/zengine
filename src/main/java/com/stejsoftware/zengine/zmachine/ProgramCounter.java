@@ -1,4 +1,4 @@
-package com.stejsoftware.zengine.processor;
+package com.stejsoftware.zengine.zmachine;
 
 import org.springframework.stereotype.Component;
 

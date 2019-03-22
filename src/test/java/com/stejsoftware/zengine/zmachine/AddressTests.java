@@ -1,7 +1,7 @@
-package com.stejsoftware.zengine.CPU;
+package com.stejsoftware.zengine.zmachine;
 
-import com.stejsoftware.zengine.processor.Address;
-import com.stejsoftware.zengine.processor.ByteAddress;
+import com.stejsoftware.zengine.zmachine.processor.Address;
+import com.stejsoftware.zengine.zmachine.processor.ByteAddress;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

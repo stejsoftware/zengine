@@ -1,4 +1,4 @@
-package com.stejsoftware.zengine.processor;
+package com.stejsoftware.zengine.zmachine.processor;
 
 public class PackedAddress implements Address {
     @Override

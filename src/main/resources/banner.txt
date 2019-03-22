@@ -1,0 +1,6 @@
+       _________________    __
+      / ___/_  __/ ____/   / /
+      \__ \ / / / __/ __  / /
+     ___/ // / / /___/ /_/ /
+    /____//_/ /_____/\____/
+${Ansi.RED} :: Spring Boot${spring-boot.formatted-version} :: ${Ansi.DEFAULT}

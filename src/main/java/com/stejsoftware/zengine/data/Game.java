@@ -1,9 +1,9 @@
 package com.stejsoftware.zengine.data;
 
-import com.stejsoftware.zengine.processor.Memory;
-import com.stejsoftware.zengine.processor.Move;
-import com.stejsoftware.zengine.processor.ProgramCounter;
-import com.stejsoftware.zengine.processor.Stack;
+import com.stejsoftware.zengine.zmachine.Memory;
+import com.stejsoftware.zengine.zmachine.processor.Move;
+import com.stejsoftware.zengine.zmachine.ProgramCounter;
+import com.stejsoftware.zengine.zmachine.Stack;
 import org.springframework.data.annotation.Id;
 //import org.springframework.data.mongodb.core.mapping.Document;
 

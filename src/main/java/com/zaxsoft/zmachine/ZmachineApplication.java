@@ -1,25 +1,28 @@
-package com.zaxsoft;
+package com.zaxsoft.zmachine;
 
-import com.zaxsoft.zmachine.Dimension;
-import com.zaxsoft.zmachine.Point;
-import com.zaxsoft.zmachine.ZCPU;
-import com.zaxsoft.zmachine.ZUserInterface;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.Vector;
 
-public class Zmachine {
+public class ZmachineApplication {
     private ZCPU cpu = new ZCPU(new UI());
 
-    private Zmachine() {
-        cpu.initialize("minizork.z3");
+    private ZmachineApplication(File story) {
+        cpu.initialize(story.toString());
         cpu.start();
 
         while (cpu.is_running()) ;
     }
 
     public static void main(String[] args) {
-        new Zmachine();
+        try {
+            new ZmachineApplication(new ClassPathResource("minizork.z3").getFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     class UI implements ZUserInterface {

@@ -1,8 +1,7 @@
-package com.stejsoftware.zengine.processor;
+package com.stejsoftware.zengine.zmachine.processor;
 
 import com.stejsoftware.zengine.data.Game;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class CPU {

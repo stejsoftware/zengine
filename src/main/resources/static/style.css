@@ -1,0 +1,21 @@
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+.header {
+  font-size: 2.5em;
+  margin: 5px;
+  border-bottom: 1px solid black;
+}
+
+.content {
+  margin: 5px;
+  padding: 5px;
+}
+
+.footer {
+  border-top: 1px solid black;
+  font-size: 1em;
+  margin: 5px;
+}

@@ -1,4 +1,4 @@
-package com.stejsoftware.zengine.processor;
+package com.stejsoftware.zengine.zmachine;
 
 import org.springframework.stereotype.Component;
 
@@ -8,6 +8,11 @@ import java.util.List;
 @Component
 public class Memory {
     private List<Byte> data;
+
+    private List<Byte> header;
+    private List<Byte> dictionary;
+    private List<Byte> objectTree;
+
 
     public void init(final List<Byte> data) {
         this.data = data;
