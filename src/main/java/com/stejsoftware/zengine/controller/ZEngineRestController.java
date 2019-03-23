@@ -5,14 +5,20 @@ import com.stejsoftware.zengine.data.Output;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 @RestController
+@RequestMapping("api")
 public class ZEngineRestController {
     private static final Logger LOG = LoggerFactory.getLogger(ZEngineRestController.class);
 
@@ -44,7 +50,21 @@ public class ZEngineRestController {
     }
 
     @GetMapping(value = "/games")
-    public List<String> getGames() throws IOException {
+    public List<String> games() throws IOException {
         return engine.gameList();
+    }
+
+    @GetMapping(value = "/stories")
+    public List<Map<String, String>> stories(HttpRequest request) throws IOException {
+        return Arrays.asList(
+                new HashMap<String, String>() {{
+                    put("label", "Mini Zork");
+                    put("uri", "/stories/minizork.z3");
+                }},
+                new HashMap<String, String>() {{
+                    put("label", "Fred");
+                    put("uri", "/stories/fred.z3");
+                }}
+        );
     }
 }
