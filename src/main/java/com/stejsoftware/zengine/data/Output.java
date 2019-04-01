@@ -1,19 +1,48 @@
 package com.stejsoftware.zengine.data;
 
 public class Output {
-    String name = "None";
+	String message = null;
+	String error = null;
+	Object data = null;
 
-    public static Output ok(String message) {
-        Output ok = new Output();
-        ok.setName(message);
-        return ok;
-    }
+	private Output() {
 
-    public String getName() {
-        return name;
-    }
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public static Output ok(String message, Object data) {
+		Output output = new Output();
+		output.setMessage(message);
+		output.setData(data);
+		return output;
+	}
+
+	public static Output error(String message) {
+		Output output = new Output();
+		output.setError(message);
+		return output;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
 }

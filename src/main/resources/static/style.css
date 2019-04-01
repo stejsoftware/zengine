@@ -19,3 +19,9 @@ body {
   font-size: 1em;
   margin: 5px;
 }
+
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+}
