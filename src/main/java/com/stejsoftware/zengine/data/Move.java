@@ -19,4 +19,6 @@ public class Move {
 	public void setOutput(String output) {
 		this.output = output;
 	}
+
+
 }

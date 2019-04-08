@@ -50,12 +50,12 @@ public class ZEngineRestController {
 	}
 
 	@PostMapping(value = "/games")
-	public Game startGame(@RequestBody() Game game) {
+	public Game startGame(@RequestBody Game game) {
 		return engine.startGame(game);
 	}
 
 	@GetMapping(value = "/games/{gameId}")
-	public Game getGame(@PathVariable() String gameId) {
+	public Game getGame(@PathVariable String gameId) {
 		return engine.getGame(gameId);
 	}
 

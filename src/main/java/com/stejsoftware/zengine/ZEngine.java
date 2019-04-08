@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -25,12 +24,6 @@ public class ZEngine {
 	@Autowired
 	private ControllerConfig config;
 
-	public Game start(File story) {
-		ZGame game = new ZGame(story);
-		games.add(game);
-		return game.toGame();
-	}
-
 	public List<Game> listGames() {
 		return games.list();
 	}
@@ -40,11 +33,11 @@ public class ZEngine {
 	}
 
 	public Game startGame(Game game) {
-		Game newGame = new Game();
+		Game newGame = null;
 
 		try {
 			File story = new ClassPathResource(config.storyFolder + "/" + game.getStoryFile()).getFile();
-			game.init(story);
+			newGame = games.add(ZGame.init(story)).toGame();
 		}
 		catch (IOException e) {
 			LOG.error("error", e);
@@ -54,14 +47,14 @@ public class ZEngine {
 	}
 
 	public Move executeMove(String gameId, Move move) {
-		return move;
+		return games.get(gameId).addMove(move.getInput());
 	}
 
 	public List<Move> listMoves(String gameId) {
-		return new ArrayList<>();
+		return games.get(gameId).getMoveHistory();
 	}
 
 	public Move getMove(String gameId, String moveId) {
-		return new Move();
+		return games.get(gameId).getMove(moveId);
 	}
 }

@@ -12,10 +12,12 @@ import java.util.Map;
 public class ZGames {
 	private Map<String, ZGame> gameMap = new HashMap<>();
 
-	public void add(ZGame game) {
+	public ZGame add(ZGame game) {
 		if (!gameMap.containsKey(game.getId())) {
 			gameMap.put(game.getId(), game);
 		}
+
+		return get(game.getId());
 	}
 
 	public ZGame get(String id) {
