@@ -3,15 +3,16 @@
  */
 package zaxsoft.zmachine;
 
-import com.stejsoftware.zengine.ZUserInterfaceImpl;
-import com.zaxsoft.zmachine.ZCPU;
-import org.junit.Test;
-import org.junit.Ignore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+
+import com.stejsoftware.zengine.ZUserInterfaceImpl;
+import com.zaxsoft.zmachine.ZCPU;
+
+import org.junit.Ignore;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author jon

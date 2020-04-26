@@ -3,9 +3,14 @@
  */
 package com.stejsoftware.zengine.CPU;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
 import com.stejsoftware.zengine.data.Game;
 import com.stejsoftware.zengine.processor.CPU;
+
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -14,9 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author jon
@@ -32,8 +34,11 @@ public class cpuTests {
     public CPU cpu;
 
     @Test
+    @Ignore
     public void cpu01GameLoadTest() {
-        Game game = Game.fromStoryFile("C:\\Projects\\zengine\\archive\\zork1.z3");
+        Game game = Game.fromStoryFile("stories/minizork.z3");
+
+        LOG.debug(game.getStoryFile());
 
         assertThat(game.getVersion(), is(3));
         assertThat(game.getRevision(), is(88));
@@ -44,12 +49,13 @@ public class cpuTests {
     }
 
     @Test
+    @Ignore
     public void cpu02ExecuteTest() {
-        Game game = Game.fromStoryFile("C:\\Projects\\zengine\\archive\\zork1.z3");
+        Game game = Game.fromStoryFile("stories/minizork.z3");
 
         String response = cpu.execute(game);
-        assertThat(response, is("You are standing in an open field west of a white house, with a boarded front door.\n" +
-                "There is a small mailbox here."));
+        assertThat(response, is("You are standing in an open field west of a white house, with a boarded front door.\n"
+                + "There is a small mailbox here."));
 
         assertThat(game.getGameScore(), is(0));
         assertThat(game.getStatusMessage(), is("West of House"));
