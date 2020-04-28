@@ -6,7 +6,7 @@
   "configurations": [
     {
       "type": "java",
-      "name": "CodeLens (Launch) - ZEngineApplication",
+      "name": "ZEngineApplication",
       "request": "launch",
       "mainClass": "com.stejsoftware.zengine.ZEngineApplication",
       "projectName": "zengine"

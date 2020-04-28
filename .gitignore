@@ -33,3 +33,4 @@
 
 # spring
 application-local.yml
+application-local.properties
