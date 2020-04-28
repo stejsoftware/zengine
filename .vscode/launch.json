@@ -6,34 +6,9 @@
   "configurations": [
     {
       "type": "java",
-      "name": "CodeLens (Launch) - Zmachine",
+      "name": "CodeLens (Launch) - ZEngineApplication",
       "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "stopOnEntry": false,
-      "mainClass": "com.zaxsoft.Zmachine",
-      "args": "",
-      "projectName": "zengine"
-    },
-    {
-      "type": "java",
-      "name": "Debug (Launch)",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "console": "internalConsole",
-      "stopOnEntry": false,
-      "mainClass": "",
-      "args": ""
-    },
-    {
-      "type": "java",
-      "name": "Debug (Launch)-ZEngineApplication<zengine>",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "console": "internalConsole",
-      "stopOnEntry": false,
       "mainClass": "com.stejsoftware.zengine.ZEngineApplication",
-      "args": "",
       "projectName": "zengine"
     }
   ]

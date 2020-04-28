@@ -14,7 +14,7 @@ public class Zmachine {
 
         ZCPU cpu = new ZCPU(new UI());
 
-        cpu.initialize("minizork.z3");
+        cpu.initialize("stories/minizork.z3");
         cpu.start();
         // cpu.run();
 
