@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <title>Login page</title>
+    <meta charset="utf-8" />
+    <link
+      href="../static/css/bootstrap.css"
+      rel="stylesheet"
+      th:href="@{/css/bootstrap.css}"
+    />
+  </head>
+  <body>
+    <div class="container p-1">
+      <div class="card">
+        <div class="card-header">
+          <h1>Login page</h1>
+          [<a href="/" th:href="@{/}">Home</a>]
+        </div>
+        <div class="card-body">
+          <p th:if="${loginError}" class="error">Wrong user or password</p>
+          <form th:action="@{/login}" method="post">
+            <label for="username">Username</label>:
+            <input
+              type="text"
+              id="username"
+              name="username"
+              autofocus="autofocus"
+            />
+            <br />
+            <label for="password">Password</label>:
+            <input type="password" id="password" name="password" /> <br />
+            <input type="submit" value="Log in" />
+          </form>
+        </div>
+        <div class="card-footer">Copyright &copy; 2020</div>
+      </div>
+    </div>
+  </body>
+</html>

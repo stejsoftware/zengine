@@ -17,6 +17,7 @@ public class ZEngineControllerTests {
     @Test
     @Ignore
     public void startTest() throws Exception {
-        System.out.println(zEngineController.input("help"));
+        System.out.println(zEngineController.index());
+        System.out.println(zEngineController.findByIdWithCustomEtag(1l));
     }
 }
