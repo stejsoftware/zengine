@@ -1,6 +1,7 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 *.class
+.classpath
 /bin
 .env
 
@@ -34,3 +35,6 @@
 # spring
 application-local.yml
 application-local.properties
+
+# macos
+.DS_Store
