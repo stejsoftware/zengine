@@ -1,20 +1,32 @@
 package com.zaxsoft;
 
+import java.io.File;
+import java.util.Scanner;
+import java.util.Vector;
+
 import com.zaxsoft.zmachine.Dimension;
 import com.zaxsoft.zmachine.Point;
 import com.zaxsoft.zmachine.ZCPU;
 import com.zaxsoft.zmachine.ZUserInterface;
 
-import java.util.Scanner;
-import java.util.Vector;
+import ml.options.Options;
+import ml.options.Options.Multiplicity;
 
 public class Zmachine {
-    Zmachine() {
+
+    private final UI ui = new UI();
+
+    private final ZCPU cpu = new ZCPU(ui);
+
+    Zmachine(File story) {
+        if (story.canRead()) {
+            cpu.initialize(story.getPath());
+        }
+    }
+
+    private void start() {
         System.out.println(">>>> Start <<<<");
 
-        ZCPU cpu = new ZCPU(new UI());
-
-        cpu.initialize("stories/minizork.z3");
         cpu.start();
         // cpu.run();
 
@@ -22,7 +34,32 @@ public class Zmachine {
     }
 
     public static void main(String[] args) {
-        new Zmachine();
+        try {
+            Options opt = new Options(args, 1);
+
+            opt.getSet().addOption("h", Multiplicity.ZERO_OR_ONE);
+
+            if (!opt.check()) {
+                System.err.println("Story Needed");
+                System.exit(1);
+            }
+
+            String story_filename = opt.getSet().getData().get(0);
+            File story = new File(story_filename);
+
+            if (story.exists()) {
+                new Zmachine(story).start();
+            }
+            else {
+                System.err.printf("File not found: %s\n", story_filename);
+                System.exit(1);
+            }
+        }
+        catch (IllegalArgumentException ex) {
+            System.err.printf("%s\n", ex.getMessage());
+            System.err.println("Story Needed");
+            System.exit(1);
+        }
     }
 
     class UI implements ZUserInterface {

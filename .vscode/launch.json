@@ -6,6 +6,14 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - Zmachine",
+      "request": "launch",
+      "mainClass": "com.zaxsoft.Zmachine",
+      "projectName": "zengine",
+      "args": "src/main/resources/static/stories/minizork.z3"
+    },
+    {
+      "type": "java",
       "name": "ZEngineApplication",
       "request": "launch",
       "mainClass": "com.stejsoftware.zengine.ZEngineApplication",
