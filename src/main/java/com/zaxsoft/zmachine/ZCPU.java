@@ -2334,7 +2334,7 @@ public class ZCPU extends Object implements Runnable
 
         addr = objTable.getObjectName(op1);
         s = decodeZString(addr);
-        log.info("object: [{}]", s);
+        
         ioCard.printString(s);
     }
 
@@ -3016,7 +3016,6 @@ public class ZCPU extends Object implements Runnable
         String s;
 
         s = new String(String.valueOf((char) vops[0]));
-        log.info("print char: [{}]", s);
         ioCard.printString(s);
     }
 

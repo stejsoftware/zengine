@@ -12,30 +12,33 @@ import com.zaxsoft.zmachine.ZUserInterface;
 import ml.options.Options;
 import ml.options.Options.Multiplicity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Zmachine {
 
     private final UI ui = new UI();
 
     private final ZCPU cpu = new ZCPU(ui);
 
-    Zmachine(File story) {
+    private static final Logger log = LoggerFactory.getLogger(Zmachine.class);
+
+    Zmachine(final File story) {
         if (story.canRead()) {
             cpu.initialize(story.getPath());
         }
     }
 
     private void start() {
-        System.out.println(">>>> Start <<<<");
+        log.debug(">>>> Start <<<<");
 
         cpu.start();
         // cpu.run();
-
-        System.out.println(">>>> Stop <<<<");
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
-            Options opt = new Options(args, 1);
+            final Options opt = new Options(args, 1);
 
             opt.getSet().addOption("h", Multiplicity.ZERO_OR_ONE);
 
@@ -44,8 +47,8 @@ public class Zmachine {
                 System.exit(1);
             }
 
-            String story_filename = opt.getSet().getData().get(0);
-            File story = new File(story_filename);
+            final String story_filename = opt.getSet().getData().get(0);
+            final File story = new File(story_filename);
 
             if (story.exists()) {
                 new Zmachine(story).start();
@@ -55,7 +58,7 @@ public class Zmachine {
                 System.exit(1);
             }
         }
-        catch (IllegalArgumentException ex) {
+        catch (final IllegalArgumentException ex) {
             System.err.printf("%s\n", ex.getMessage());
             System.err.println("Story Needed");
             System.exit(1);
@@ -66,18 +69,18 @@ public class Zmachine {
         Scanner scanner = new Scanner(System.in);
 
         @Override
-        public void fatal(String error) {
-            System.err.println(error);
-            System.exit(-1);
+        public void fatal(final String error) {
+            log.error(error);
+            System.exit(1);
         }
 
         @Override
-        public void initialize(int ver) {
-            System.out.printf("Ver: %s\n", ver);
+        public void initialize(final int ver) {
+            log.info("Ver: {}", ver);
         }
 
         @Override
-        public void setTerminatingCharacters(Vector<Integer> chars) {
+        public void setTerminatingCharacters(final Vector<Integer> chars) {
 
         }
 
@@ -137,7 +140,7 @@ public class Zmachine {
         }
 
         @Override
-        public Dimension getWindowSize(int window) {
+        public Dimension getWindowSize(final int window) {
             return new Dimension(80, 25);
         }
 
@@ -157,75 +160,77 @@ public class Zmachine {
         }
 
         @Override
-        public void showStatusBar(String s, int a, int b, boolean flag) {
+        public void showStatusBar(final String s, final int a, final int b, final boolean flag) {
             System.out.printf("[%s %d:%d]\n", s, a, b);
         }
 
         @Override
-        public void splitScreen(int lines) {
+        public void splitScreen(final int lines) {
 
         }
 
         @Override
-        public void setCurrentWindow(int window) {
+        public void setCurrentWindow(final int window) {
 
         }
 
         @Override
-        public void setCursorPosition(int x, int y) {
+        public void setCursorPosition(final int x, final int y) {
 
         }
 
         @Override
-        public void setColor(int fg, int bg) {
+        public void setColor(final int fg, final int bg) {
 
         }
 
         @Override
-        public void setTextStyle(int style) {
+        public void setTextStyle(final int style) {
 
         }
 
         @Override
-        public void setFont(int font) {
+        public void setFont(final int font) {
 
         }
 
         @Override
-        public int readLine(StringBuffer sb, int time) {
+        public int readLine(final StringBuffer sb, final int time) {
             sb.append(scanner.nextLine());
             scanner.delimiter();
             return 0;
         }
 
         @Override
-        public int readChar(int time) {
+        public int readChar(final int time) {
             return scanner.nextByte();
         }
 
         @Override
-        public void showString(String s) {
+        public void showString(final String s) {
             System.out.print(s);
         }
 
         @Override
-        public void scrollWindow(int lines) {
+        public void scrollWindow(final int lines) {
 
         }
 
         @Override
-        public void eraseLine(int s) {
+        public void eraseLine(final int s) {
 
         }
 
         @Override
-        public void eraseWindow(int window) {
+        public void eraseWindow(final int window) {
 
         }
 
         @Override
-        public String getFilename(String title, String suggested, boolean saveFlag) {
-            return null;
+        public String getFilename(final String title, final String suggested, final boolean saveFlag) {
+            log.debug("getFilename('{}' '{}' '{}')", title, suggested, saveFlag);
+
+            return "file.dat";
         }
 
         @Override
