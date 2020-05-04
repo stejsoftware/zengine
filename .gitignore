@@ -38,3 +38,6 @@ application-local.properties
 
 # macos
 .DS_Store
+
+# vscode
+.vscode
