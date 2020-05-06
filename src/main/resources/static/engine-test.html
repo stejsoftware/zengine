@@ -47,24 +47,48 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="/js/engine.io.js"></script>
     <script>
-      var socket = eio("ws://localhost:8080/");
+      function add(msg) {
+        $("#messages").append($("<li>").text(msg));
+        window.scrollTo(0, document.body.scrollHeight);
+      }
 
-      socket.on("open", function (s) {
-        console.log("[open]", { s });
-        $("#messages").append($("<li>").text("[open]"));
+      function event(name) {
+        return [
+          name,
+          function (e) {
+            add(`[${name}]`);
+            console.log(name, { e });
+          },
+        ];
+      }
 
-        socket.on("message", function (data) {
-          $("#messages").append($("<li>").text(data));
-          console.log({ data });
+      $(function () {
+        var socket = eio();
+
+        socket.on("open", function (e) {
+          add("[open]");
+          console.log("open", { e });
         });
 
-        socket.on("close", function () {
-          console.log("[closed]");
+        socket.on.apply(socket, event("upgrade"));
+        socket.on.apply(socket, event("upgradeError"));
+        socket.on.apply(socket, event("error"));
+        socket.on.apply(socket, event("close"));
+        socket.on.apply(socket, event("ping"));
+        socket.on.apply(socket, event("pong"));
+        socket.on.apply(socket, event("flush"));
+        socket.on.apply(socket, event("drain"));
+
+        socket.on("message", function (data) {
+          add(JSON.stringify(data));
+          console.log(data);
         });
 
         $("form").submit(function (e) {
           e.preventDefault(); // prevents page reloading
-          socket.emit("message", $("#m").val());
+          socket.send(
+            JSON.stringify({ type: "chat message", value: $("#m").val() })
+          );
           $("#m").val("");
           return false;
         });

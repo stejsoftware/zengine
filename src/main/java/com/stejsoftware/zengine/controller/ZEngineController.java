@@ -8,6 +8,7 @@ import com.stejsoftware.zengine.ZUserInterfaceImpl;
 import com.stejsoftware.zengine.data.Response;
 import com.zaxsoft.zmachine.ZCPU;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/cpu")
 public class ZEngineController {
 
+    @Autowired
+    ZUserInterfaceImpl ui;
+
+    @Autowired
+    ZCPU cpu;
+
     @GetMapping(produces = "application/json")
     public Response index() {
         return new Response("error");
@@ -27,8 +34,6 @@ public class ZEngineController {
     public Response start() {
         Response response = new Response("ok");
 
-        ZUserInterfaceImpl ui = new ZUserInterfaceImpl();
-        ZCPU cpu = new ZCPU(ui);
         File story = new File("src/main/resources/static/stories/minizork.z3");
 
         cpu.initialize(story.getAbsolutePath());

@@ -15,7 +15,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(mEngineIoHandler, "/engine.io/", "/socket.io/").addInterceptors(mEngineIoHandler);
+        registry.addHandler(mEngineIoHandler, "/engine.io/", "/socket.io/*").addInterceptors(mEngineIoHandler);
     }
 
 }

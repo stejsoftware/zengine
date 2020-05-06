@@ -45,11 +45,21 @@
       }
     </style>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
     <script>
       function add(msg) {
         $("#messages").append($("<li>").text(msg));
         window.scrollTo(0, document.body.scrollHeight);
+      }
+
+      function event(name) {
+        return [
+          name,
+          function (e) {
+            add(`[${name}]`);
+            console.log(name, { e });
+          },
+        ];
       }
 
       $(function () {
@@ -61,9 +71,10 @@
           return false;
         });
 
-        socket.on("connect", function () {
-          add("[connected]");
-        });
+
+        socket.on.apply(socket, event("message"));
+        socket.on.apply(socket, event("connect"));
+        socket.on.apply(socket, event("disconnect"));
 
         socket.on("chat message", function (msg) {
           add(msg);
