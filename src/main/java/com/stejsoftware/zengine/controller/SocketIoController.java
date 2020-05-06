@@ -18,17 +18,24 @@ public class SocketIoController {
             @Override
             public void call(Object... args) {
                 SocketIoSocket socket = (SocketIoSocket) args[0];
+
+                socket.on("chat message", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        socket.send("chat message", args);
+                    }
+                });
+
                 socket.send("chat message", "Hello Socket.IO");
             }
-        }).on("chat message", new Emitter.Listener() {
+        });
+
+        socketIoServer.namespace("/admin").on("connection", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                log.debug(">>>> {}", args);
-            }
-        }).on("message", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                log.debug(">>>> {}", args);
+                SocketIoSocket socket = (SocketIoSocket) args[0];
+
+                socket.send("chat message", "Hello Socket.IO Admin");
             }
         });
 

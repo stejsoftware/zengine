@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
                 .authorizeRequests(authorize -> authorize
-                    .antMatchers("/cpu", "/cpu/**").permitAll()
+                    .antMatchers("/cpu/**").permitAll()
 					.antMatchers("/css/**", "/index").permitAll()
 					.antMatchers("/user/**").hasRole("USER")
 				)
