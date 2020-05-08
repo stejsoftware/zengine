@@ -15,8 +15,8 @@ public class ServerConfig {
     }
 
     @Bean
-    public SocketIoServer socketIoServer() {
-        return new SocketIoServer(engineIoServer());
+    public SocketIoServer socketIoServer(final EngineIoServer server) {
+        return new SocketIoServer(server);
     }
-    
+
 }
