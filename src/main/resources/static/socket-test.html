@@ -63,7 +63,7 @@
       }
 
       $(function () {
-        var socket = io();
+        var socket = io("/");
 
         $("form").submit(function () {
           socket.emit("chat message", $("#m").val());
@@ -71,9 +71,9 @@
           return false;
         });
 
-        socket.on.apply(socket, event("message"));
         socket.on.apply(socket, event("connect"));
         socket.on.apply(socket, event("disconnect"));
+        socket.on.apply(socket, event("message"));
 
         socket.on("chat message", function (msg) {
           add(msg);

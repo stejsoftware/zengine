@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.socket.engineio.server.EngineIoServer;
-import io.socket.socketio.server.SocketIoServer;
 
 @Configuration
 public class ServerConfig {
@@ -12,11 +11,6 @@ public class ServerConfig {
     @Bean
     public EngineIoServer engineIoServer() {
         return new EngineIoServer();
-    }
-
-    @Bean
-    public SocketIoServer socketIoServer(final EngineIoServer server) {
-        return new SocketIoServer(server);
     }
 
 }

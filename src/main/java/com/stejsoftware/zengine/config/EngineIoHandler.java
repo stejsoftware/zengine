@@ -29,17 +29,16 @@ import io.socket.parseqs.ParseQS;
 
 @Controller
 public final class EngineIoHandler implements HandshakeInterceptor, WebSocketHandler {
-    private final Logger log = LoggerFactory.getLogger(EngineIoHandler.class);
+    private final Logger        log                       = LoggerFactory.getLogger(EngineIoHandler.class);
 
     private static final String ATTRIBUTE_ENGINEIO_BRIDGE = "engineIo.bridge";
 
-    private static final String ATTRIBUTE_ENGINEIO_QUERY = "engineIo.query";
+    private static final String ATTRIBUTE_ENGINEIO_QUERY  = "engineIo.query";
 
     @Autowired
-    private EngineIoServer mEngineIoServer;
+    private EngineIoServer      mEngineIoServer;
 
-    @RequestMapping(value = { "/engine.io/", "/socket.io/**" }, method = { RequestMethod.GET, RequestMethod.POST,
-            RequestMethod.OPTIONS }, headers = "Connection!=Upgrade")
+    @RequestMapping(value = { "/engine.io/", "/socket.io/**" }, method = { RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS }, headers = "Connection!=Upgrade")
     public void engineHandler(HttpServletRequest request, HttpServletResponse response) throws IOException {
         mEngineIoServer.handleRequest(request, response);
     }
@@ -47,15 +46,13 @@ public final class EngineIoHandler implements HandshakeInterceptor, WebSocketHan
     /* HandshakeInterceptor */
 
     @Override
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-            Map<String, Object> attributes) {
+    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) {
         attributes.put(ATTRIBUTE_ENGINEIO_QUERY, request.getURI().getQuery());
         return true;
     }
 
     @Override
-    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-            Exception exception) {
+    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
     }
 
     /* WebSocketHandler */
@@ -74,25 +71,22 @@ public final class EngineIoHandler implements HandshakeInterceptor, WebSocketHan
 
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) {
-        ((EngineIoSpringWebSocket) webSocketSession.getAttributes().get(ATTRIBUTE_ENGINEIO_BRIDGE))
-                .afterConnectionClosed(closeStatus);
+        ((EngineIoSpringWebSocket) webSocketSession.getAttributes().get(ATTRIBUTE_ENGINEIO_BRIDGE)).afterConnectionClosed(closeStatus);
     }
 
     @Override
     public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) {
-        ((EngineIoSpringWebSocket) webSocketSession.getAttributes().get(ATTRIBUTE_ENGINEIO_BRIDGE))
-                .handleMessage(webSocketMessage);
+        ((EngineIoSpringWebSocket) webSocketSession.getAttributes().get(ATTRIBUTE_ENGINEIO_BRIDGE)).handleMessage(webSocketMessage);
     }
 
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) {
-        ((EngineIoSpringWebSocket) webSocketSession.getAttributes().get(ATTRIBUTE_ENGINEIO_BRIDGE))
-                .handleTransportError(throwable);
+        ((EngineIoSpringWebSocket) webSocketSession.getAttributes().get(ATTRIBUTE_ENGINEIO_BRIDGE)).handleTransportError(throwable);
     }
 
     private static final class EngineIoSpringWebSocket extends EngineIoWebSocket {
 
-        private final WebSocketSession mSession;
+        private final WebSocketSession    mSession;
 
         private final Map<String, String> mQuery;
 
@@ -145,9 +139,7 @@ public final class EngineIoHandler implements HandshakeInterceptor, WebSocketHan
                 emit("message", (Object) message.getPayload());
             }
             else {
-                throw new RuntimeException(
-                        String.format("Invalid message type received: %s. Expected String or byte[].",
-                                message.getPayload().getClass().getName()));
+                throw new RuntimeException(String.format("Invalid message type received: %s. Expected String or byte[].", message.getPayload().getClass().getName()));
             }
         }
 
