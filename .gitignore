@@ -43,5 +43,7 @@ application-local.properties
 .vscode
 
 #node
+/node/
 node_modules/
 package-lock.json
+/src/main/resources/static/built/

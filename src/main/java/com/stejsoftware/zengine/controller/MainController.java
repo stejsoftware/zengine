@@ -17,4 +17,9 @@ public class MainController {
         model.addAttribute("loginError", true);
         return "login";
     }
+
+    @RequestMapping("/zvm")
+    public String zvm() {
+        return "zvm";
+    }
 }
