@@ -73,7 +73,8 @@
 
         socket.on.apply(socket, event("connect"));
         socket.on.apply(socket, event("disconnect"));
-        socket.on.apply(socket, event("message"));
+        socket.on.apply(socket, event("error"));
+        socket.on.apply(socket, event("connect_error"));
 
         socket.on("chat message", function (msg) {
           add(msg);

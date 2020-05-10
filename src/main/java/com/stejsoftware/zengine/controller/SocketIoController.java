@@ -4,56 +4,42 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
-import io.socket.engineio.server.EngineIoServer;
-import io.socket.engineio.server.EngineIoSocket;
-import io.socket.parser.IOParser;
-import io.socket.parser.Packet;
-import io.socket.parser.Parser;
+import io.socket.spring.SocketIoSocket;
+import io.socket.spring.annotation.OnConnect;
+import io.socket.spring.annotation.OnEvent;
 
 @Controller
 public class SocketIoController {
 
-    private static final Logger log     = LoggerFactory.getLogger(SocketIoController.class);
-    private IOParser.Decoder    decoder = new IOParser.Decoder();
+    private static final Logger log = LoggerFactory.getLogger(SocketIoController.class);
 
-    SocketIoController(EngineIoServer server) {
-
-        server.on("connection", args -> {
-            final EngineIoSocket socket = (EngineIoSocket) args[0];
-
-            log.info("connection: {}", socket.getId());
-
-            send(socket, new Packet<>(Parser.CONNECT));
-
-            decoder.onDecoded(packet -> {
-                log.info("receive: {} {} {}", packet.type, packet.nsp, packet.data);
-
-                if (packet.type == Parser.CONNECT) {
-                    Packet<?> a = new Packet<>(Parser.CONNECT);
-                    a.nsp = packet.nsp;
-                    send(socket, a);
-                }
-
-                if (packet.type == Parser.EVENT) {
-                    send(socket, packet);
-                }
-            });
-
-            socket.on("data", items -> {
-                for (Object item : items) {
-                    decoder.add(item.toString());
-                }
-            });
-        });
+    @OnConnect("/")
+    public void connection(SocketIoSocket socket) {
+        log.info("got connection");
     }
 
-    private <T> void send(EngineIoSocket socket, Packet<T> socketPacket) {
-        log.info("send: {} {} {}", socketPacket.type, socketPacket.nsp, socketPacket.data);
-        new IOParser.Encoder().encode(socketPacket, items -> {
-            for (Object item : items) {
-                log.info("out: {}", item);
-                socket.send(new io.socket.engineio.parser.Packet<>(io.socket.engineio.parser.Packet.MESSAGE, item));
-            }
-        });
+    @OnEvent("chat message")
+    public void chat_message1(Object data) {
+        log.info("chat message 1: {}", data);
+    }
+
+    @OnEvent(event = "chat message")
+    public void chat_message2(Object data) {
+        log.info("chat message 2: {}", data);
+    }
+
+    @OnEvent(event = "chat message", namespace = "/bar")
+    public void bar_chat_message(Object data) {
+        log.info("chat message for bar: {}", data);
+    }
+
+    @OnEvent(event = "foo")
+    public void foo(Object data) {
+        log.info("foo: {}", data);
+    }
+
+    @OnEvent(event = "foo", namespace = "/bar")
+    public void bar_foo(Object data) {
+        log.info("foo for bar: {}", data);
     }
 }

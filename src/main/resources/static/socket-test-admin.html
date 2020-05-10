@@ -63,7 +63,7 @@
       }
 
       $(function () {
-        var socket = io("/admin");
+        var socket = io("/admin", { autoConnect: false });
 
         $("form").submit(function () {
           socket.emit("chat message", $("#m").val());
@@ -73,11 +73,14 @@
 
         socket.on.apply(socket, event("connect"));
         socket.on.apply(socket, event("disconnect"));
-        socket.on.apply(socket, event("message"));
+        socket.on.apply(socket, event("error"));
+        socket.on.apply(socket, event("connect_error"));
 
         socket.on("chat message", function (msg) {
           add(msg);
         });
+
+        socket.connect();
       });
     </script>
   </head>
