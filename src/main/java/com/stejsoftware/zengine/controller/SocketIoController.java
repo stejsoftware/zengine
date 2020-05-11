@@ -1,11 +1,15 @@
 package com.stejsoftware.zengine.controller;
 
+import java.util.Arrays;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import io.socket.spring.SocketIoSocket;
+import io.socket.spring.annotation.Namespace;
 import io.socket.spring.annotation.OnConnect;
+import io.socket.spring.annotation.OnDisconnect;
 import io.socket.spring.annotation.OnEvent;
 
 @Controller
@@ -15,31 +19,23 @@ public class SocketIoController {
 
     @OnConnect("/")
     public void connection(SocketIoSocket socket) {
-        log.info("got connection");
+        log.info("got connection: {}", socket.getId());
     }
 
+    @OnDisconnect("/")
+    public void disconnection(SocketIoSocket socket) {
+        log.info("lost connection: {}", socket.getId());
+    }
+
+    @OnEvent("list")
+    public void getStoryList(SocketIoSocket socket) {
+        socket.emit("story_list", Arrays.asList("zork.z5"));
+    }
+
+    @Namespace("/admin")
     @OnEvent("chat message")
-    public void chat_message1(Object data) {
-        log.info("chat message 1: {}", data);
-    }
-
-    @OnEvent(event = "chat message")
-    public void chat_message2(Object data) {
-        log.info("chat message 2: {}", data);
-    }
-
-    @OnEvent(event = "chat message", namespace = "/bar")
-    public void bar_chat_message(Object data) {
-        log.info("chat message for bar: {}", data);
-    }
-
-    @OnEvent(event = "foo")
-    public void foo(Object data) {
-        log.info("foo: {}", data);
-    }
-
-    @OnEvent(event = "foo", namespace = "/bar")
-    public void bar_foo(Object data) {
-        log.info("foo for bar: {}", data);
+    public void chatMessage(SocketIoSocket socket, String message) {
+        log.info("chat message: \"{}\"", message);
+        socket.emit("chat message", message);
     }
 }
