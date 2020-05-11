@@ -22,13 +22,6 @@ public class SocketIoClient {
         server = socketIoserver;
         engine = engineIoSocket;
 
-        // socket.on("data", data -> {
-        // log.info("data: [{}]", data);
-        // });
-
-        // // send(socket, new Packet<>(Parser.CONNECT));
-        // send(socket, new Packet<>(Parser.ERROR, "not implemented"));
-
         decoder.onDecoded(packet -> {
             log.info("receive: {}({}) {} '{}'", Parser.types[packet.type], packet.type, packet.nsp, packet.data);
 
