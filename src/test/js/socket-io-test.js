@@ -5,14 +5,14 @@ Promise.all(
   ["/", "/admin", "/foo"].map((namespace) => {
     return new Promise((resolve, reject) => {
       const uri = `http://localhost:${port}${namespace}`;
-      
+
       const t = setTimeout(() => {
         resolve({ uri, success: false, err: "connected with no event" });
       }, 5000);
 
       io(uri, {
         autoConnect: false,
-        timeout: 1000,
+        forceNew: false,
       })
         .on("connect", () => {
           clearTimeout(t);

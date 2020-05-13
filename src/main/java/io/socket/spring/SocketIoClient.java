@@ -1,83 +1,72 @@
 package io.socket.spring;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONStringer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.socket.engineio.server.EngineIoSocket;
-import io.socket.parser.IOParser;
 import io.socket.parser.Packet;
 import io.socket.parser.Parser;
 
 public class SocketIoClient {
-    private static final Logger           log     = LoggerFactory.getLogger(SocketIoClient.class);
+    private static final Logger  log = LoggerFactory.getLogger(SocketIoClient.class);
 
-    private SocketIoServer                server;
-    private EngineIoSocket                engine;
+    private final SocketIoServer server;
+    private final SocketIoSocket socket;
 
-    private static final IOParser.Decoder decoder = new IOParser.Decoder();
-    private static final IOParser.Encoder encoder = new IOParser.Encoder();
-
-    public SocketIoClient(final SocketIoServer socketIoserver, final EngineIoSocket engineIoSocket) {
+    public SocketIoClient(final SocketIoServer socketIoserver, final SocketIoSocket socketIoSocket) {
         server = socketIoserver;
-        engine = engineIoSocket;
+        socket = socketIoSocket;
 
-        decoder.onDecoded(packet -> {
-            log.info("receive: {}({}) {} '{}'", Parser.types[packet.type], packet.type, packet.nsp, packet.data);
+        socket.on("packet", args -> {
+            Packet<?> packet = (Packet<?>) args[0];
 
-            if (packet.type == Parser.CONNECT) {
+            switch (packet.type) {
+            case Parser.CONNECT:
                 connect(packet.nsp);
+                break;
+
+            case Parser.EVENT:
+                try {
+                    JSONArray json = new JSONArray(packet.data.toString());
+                    emitEvent(packet.nsp, json.get(0).toString(), json.opt(1));
+                }
+                catch (JSONException ex) {
+                    log.error(ex.getMessage());
+                }
+                break;
+
+            default:
+                log.info("unknown packet: {}({}) {}", Parser.types[packet.type], packet.type, packet.nsp);
             }
 
-            if (packet.type == Parser.EVENT) {
-                packet(packet);
-            }
-        });
-
-        engine.on("data", items -> {
-            for (Object item : items) {
-                decoder.add(item.toString());
-            }
-        });
-
-    }
-
-    public String getId() {
-        return engine.getId();
-    }
-
-    public void packet(int type, String nsp) {
-        packet(type, nsp, null);
-    }
-
-    public <T> void packet(int type, String nsp, T data) {
-        Packet<String> packet = new Packet<>();
-
-        packet.type = type;
-        packet.nsp = nsp;
-        packet.data = data != null ? JSONStringer.valueToString(data) : null;
-
-        packet(packet);
-    }
-
-    public void packet(Packet<?> socketPacket) {
-        log.info("send: {}({}) {} {}", Parser.types[socketPacket.type], socketPacket.type, socketPacket.nsp, socketPacket.data);
-
-        encoder.encode(socketPacket, items -> {
-            for (Object item : items) {
-                engine.send(new io.socket.engineio.parser.Packet<>(io.socket.engineio.parser.Packet.MESSAGE, item));
-            }
         });
     }
 
-    public void connect(String namespace) {
+    protected <T> void emitEvent(String namespace, String event, T data) {
+        log.info("emitEvent: {} {} {}", namespace, JSONStringer.valueToString(event), JSONStringer.valueToString(data));
+
         SocketIoNamespace nsp = server.getNamespace(namespace);
 
         if (nsp != null) {
-            packet(Parser.CONNECT, namespace);
-        }
-        else {
-            packet(Parser.ERROR, namespace, "Invalid namespace");
+            nsp.emit(event, data);
         }
     }
+
+    public void connect(String namespace) {
+        log.info("connect: {}", namespace);
+
+        SocketIoNamespace nsp = server.getNamespace(namespace);
+
+        if (nsp != null) {
+            socket.packet(Parser.CONNECT, namespace);
+            nsp.emit("connect", namespace);
+        }
+        else {
+            log.warn("connect: unknown namespace: {}", namespace);
+            socket.packet(Parser.ERROR, namespace, "Invalid namespace");
+        }
+    }
+
 }

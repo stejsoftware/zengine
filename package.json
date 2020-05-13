@@ -21,7 +21,8 @@
     "socket.io-client": "^2.3.0"
   },
   "scripts": {
-    "watch": "webpack --watch -d --output ./target/classes/static/built/bundle.js"
+    "build": "webpack",
+    "start:dev": "webpack --watch -d --output ./target/classes/static/built/bundle.js"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
