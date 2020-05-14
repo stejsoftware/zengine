@@ -40,7 +40,7 @@ public final class EngineIoHandler implements HandshakeInterceptor, WebSocketHan
 
     @RequestMapping(value = { "/engine.io/", "/socket.io/**" }, method = { RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS }, headers = "Connection!=Upgrade")
     public void engineHandler(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.info("{} {} {}", request.getMethod(), request.getRequestURI(), request.getQueryString());
+        log.debug("{} {} {}", request.getMethod(), request.getRequestURI(), request.getQueryString());
         mEngineIoServer.handleRequest(request, response);
     }
 

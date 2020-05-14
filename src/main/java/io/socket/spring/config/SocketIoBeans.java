@@ -22,10 +22,10 @@ public class SocketIoBeans {
         return new SocketIoServer(server);
     }
 
-    public static String toString(Object[] array) {
+    public static <T> String toString(T[] array) {
         StringBuilder sb = new StringBuilder();
 
-        for (Object item : array) {
+        for (T item : array) {
             if (sb.length() > 0) {
                 sb.append(", ");
             }

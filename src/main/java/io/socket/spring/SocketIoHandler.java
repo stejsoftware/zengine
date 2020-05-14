@@ -13,11 +13,11 @@ public class SocketIoHandler {
 
     @OnConnect("/")
     public void defaultConnectHandler(final SocketIoSocket socket) {
-        log.info("connect to namespace: / ({})", socket);
+        log.debug("connect to namespace: / ({})", socket);
     }
 
     @OnDisconnect("/")
     public void defaultDisconnectHandler(final SocketIoSocket socket) {
-        log.info("disconnect from namespace: / ({})", socket);
+        log.debug("disconnect from namespace: / ({})", socket);
     }
 }

@@ -26,13 +26,9 @@ public class SocketIoNamespace extends Emitter {
         return this.name;
     }
 
-    public void addSocket(SocketIoSocket socket) {
-        sockets.add(socket);
-    }
-
-    public void addHandler(String event, Object bean, Method method) {
+    public void addHandler(final String event, final Object bean, final Method method) {
         if (event != null && event.length() > 0) {
-            log.info("addHandler: \"{}\" -> {}", event, SocketIoBeans.toString(method));
+            log.debug("addHandler: \"{},{}\" -> {}", name, event, SocketIoBeans.toString(method));
 
             on(event, eventArgs -> {
                 log.debug("event: {}", event);
@@ -48,11 +44,11 @@ public class SocketIoNamespace extends Emitter {
                     for (Parameter param : paramList) {
                         Object arg = null;
 
-                        for (Object eventArg : eventArgList) {
-                            if (param.getType() == SocketIoServer.class) {
-                                arg = socket;
-                            }
-                            else {
+                        if (param.getType() == SocketIoSocket.class) {
+                            arg = socket;
+                        }
+                        else {
+                            for (Object eventArg : eventArgList) {
                                 if (eventArg != null) {
                                     if (eventArg.getClass() == param.getType()) {
                                         arg = eventArg;
@@ -64,18 +60,26 @@ public class SocketIoNamespace extends Emitter {
                         args.add(arg);
                     }
 
-                    log.info("  call:   {}.{}({})", method.getDeclaringClass().getSimpleName(), method.getName(), SocketIoBeans.toString(args));
+                    log.debug("  call:   {}.{}({})", method.getDeclaringClass().getSimpleName(), method.getName(), SocketIoBeans.toString(args));
 
-                    // try {
-                    // method.invoke(bean, args.toArray());
-                    // }
-                    // catch (IllegalAccessException | IllegalArgumentException |
-                    // InvocationTargetException ex) {
-                    // log.error("call: error:", ex);
-                    // }
+                    try {
+                        method.invoke(bean, args.toArray());
+                    }
+                    catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                        log.error("call: error:", ex);
+                    }
                 }
             });
         }
     }
 
+    public void connect(final SocketIoSocket socketIoSocket) {
+        log.debug("connect: {} -> {}", socketIoSocket.getId(), this.name);
+        sockets.add(socketIoSocket);
+    }
+
+    public void disconnect(SocketIoSocket socketIoSocket) {
+        log.debug("disconnect: {} -> {}", socketIoSocket.getId(), this.name);
+        sockets.remove(socketIoSocket);
+    }
 }

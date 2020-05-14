@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONStringer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,40 +14,49 @@ import io.socket.engineio.server.EngineIoSocket;
 import io.socket.spring.annotation.Namespace;
 
 public class SocketIoServer extends Emitter {
-    private static final Logger                  log  = LoggerFactory.getLogger(SocketIoServer.class);
+    private static final Logger                  log        = LoggerFactory.getLogger(SocketIoServer.class);
 
-    private final Map<String, SocketIoNamespace> nsps = new HashMap<>();
+    private final Map<String, SocketIoNamespace> namespaces = new HashMap<>();
 
     public SocketIoServer(final EngineIoServer server) {
         server.on("connection", sockets -> {
+            EngineIoSocket engineIoSocket = (EngineIoSocket) sockets[0];
+            SocketIoSocket socket = new SocketIoSocket(engineIoSocket, this);
 
-            EngineIoSocket engineSocket = (EngineIoSocket) sockets[0];
-
-            SocketIoSocket socket = new SocketIoSocket(engineSocket);
-            SocketIoClient client = new SocketIoClient(this, socket);
-
-            log.info("websocket connection: [{}]", engineSocket.getId());
+            log.debug("websocket connection: [{}]", engineIoSocket.getId());
 
             // connect to the default namesapce
-            client.connect("/");
+            socket.connect("/");
         });
     }
 
     public SocketIoNamespace getNamespace(final String name) {
-        return this.nsps.get(name);
+        return namespaces.get(name);
     }
 
-    public void addHandler(Namespace namespace, String event, Object bean, Method method) {
+    public void addHandler(final Namespace namespace, final String event, final Object bean, final Method method) {
         String namespaceValue = "/";
 
         if (namespace != null) {
             namespaceValue = namespace.value();
         }
 
-        if (!nsps.containsKey(namespaceValue)) {
-            nsps.put(namespaceValue, new SocketIoNamespace(namespaceValue));
+        if (!namespaces.containsKey(namespaceValue)) {
+            namespaces.put(namespaceValue, new SocketIoNamespace(namespaceValue));
         }
 
-        nsps.get(namespaceValue).addHandler(event, bean, method);
+        namespaces.get(namespaceValue).addHandler(event, bean, method);
     }
+
+    public <T> void emit(final String namespace, final String event, final T data) {
+        log.debug("server emit: {} {} {}", namespace, JSONStringer.valueToString(event), JSONStringer.valueToString(data));
+
+        if (namespaces.containsKey(namespace)) {
+            namespaces.get(namespace).emit(event, data);
+        }
+        else {
+            log.warn("namespace not found: {}", namespace);
+        }
+    }
+
 }

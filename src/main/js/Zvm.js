@@ -33,11 +33,14 @@ function Zvm() {
         list: {
           function: (state, opts) => {
             return new Promise((resolve, reject) => {
-              socket.emit("list").once("story_list", (data) => {
-                resolve({
-                  output: OutputFactory.makeTextOutput(JSON.stringify(opts)),
-                });
-              });
+              socket
+                .once("story_list", (data) => {
+                  console.log({ data });
+                  resolve({
+                    output: OutputFactory.makeTextOutput(JSON.stringify(opts)),
+                  });
+                })
+                .emit("list");
             });
           },
           optDef: {},
