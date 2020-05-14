@@ -1,5 +1,11 @@
-var io = require("socket.io-client");
-var port = process.argv[2] || 8080;
+#!/usr/bin/env node
+const { argv } = require("yargs");
+const io = require("socket.io-client");
+
+const port = argv.port || 8080;
+const forceNew = argv.new || false;
+
+console.log({ argv });
 
 Promise.all(
   ["/", "/admin", "/foo"].map((namespace) => {
@@ -12,7 +18,7 @@ Promise.all(
 
       io(uri, {
         autoConnect: false,
-        forceNew: false,
+        forceNew,
       })
         .on("connect", () => {
           clearTimeout(t);
