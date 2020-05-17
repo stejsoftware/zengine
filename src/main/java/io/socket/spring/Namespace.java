@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory;
 import io.socket.emitter.Emitter;
 import io.socket.spring.config.SocketIoBeans;
 
-public class SocketIoNamespace extends Emitter {
-    private static final Logger        log     = LoggerFactory.getLogger(SocketIoNamespace.class);
-    private final List<SocketIoSocket> sockets = new ArrayList<>();
+public class Namespace extends Emitter {
+    private static final Logger        log     = LoggerFactory.getLogger(Namespace.class);
+    private final List<Socket> sockets = new ArrayList<>();
     private final String               name;
 
-    public SocketIoNamespace(String name) {
+    public Namespace(String name) {
         this.name = name;
     }
 
@@ -38,14 +38,17 @@ public class SocketIoNamespace extends Emitter {
                 List<Parameter> paramList = Arrays.asList(method.getParameters());
                 List<Object> eventArgList = Arrays.asList(eventArgs);
 
-                for (SocketIoSocket socket : sockets) {
+                for (Socket socket : sockets) {
                     List<Object> args = new ArrayList<Object>();
 
                     for (Parameter param : paramList) {
                         Object arg = null;
 
-                        if (param.getType() == SocketIoSocket.class) {
+                        if (param.getType() == Socket.class) {
                             arg = socket;
+                        }
+                        else if (param.getType() == Ack.class) {
+                            arg = new Ack<>();
                         }
                         else {
                             for (Object eventArg : eventArgList) {
@@ -73,12 +76,12 @@ public class SocketIoNamespace extends Emitter {
         }
     }
 
-    public void connect(final SocketIoSocket socketIoSocket) {
+    public void connect(final Socket socketIoSocket) {
         log.debug("connect: {} -> {}", socketIoSocket.getId(), this.name);
         sockets.add(socketIoSocket);
     }
 
-    public void disconnect(SocketIoSocket socketIoSocket) {
+    public void disconnect(Socket socketIoSocket) {
         log.debug("disconnect: {} -> {}", socketIoSocket.getId(), this.name);
         sockets.remove(socketIoSocket);
     }

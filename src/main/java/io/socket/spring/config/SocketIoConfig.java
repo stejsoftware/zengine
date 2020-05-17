@@ -13,7 +13,7 @@ import org.springframework.util.ReflectionUtils.MethodCallback;
 import org.springframework.util.ReflectionUtils.MethodFilter;
 
 import io.socket.spring.SocketIoServer;
-import io.socket.spring.annotation.Namespace;
+import io.socket.spring.annotation.Of;
 import io.socket.spring.annotation.OnConnect;
 import io.socket.spring.annotation.OnDisconnect;
 import io.socket.spring.annotation.OnEvent;
@@ -36,7 +36,7 @@ public class SocketIoConfig implements BeanPostProcessor {
 
                 String className = bean.getClass().getSimpleName();
                 String methodName = method.getName();
-                Namespace namespace = method.getAnnotation(Namespace.class);
+                Of namespace = method.getAnnotation(Of.class);
                 OnEvent onEvent = method.getAnnotation(OnEvent.class);
 
                 log.info("OnEvent: \"{}\" -> {}.{}", onEvent.value(), className, methodName);
@@ -56,7 +56,7 @@ public class SocketIoConfig implements BeanPostProcessor {
             public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
                 String className = bean.getClass().getSimpleName();
                 String methodName = method.getName();
-                Namespace namespace = method.getAnnotation(Namespace.class);
+                Of namespace = method.getAnnotation(Of.class);
 
                 log.info("OnConnect: {}.{}", className, methodName);
 
@@ -75,7 +75,7 @@ public class SocketIoConfig implements BeanPostProcessor {
             public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
                 String className = bean.getClass().getSimpleName();
                 String methodName = method.getName();
-                Namespace namespace = method.getAnnotation(Namespace.class);
+                Of namespace = method.getAnnotation(Of.class);
 
                 log.info("OnDisconnect: {}.{}", className, methodName);
 

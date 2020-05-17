@@ -1,6 +1,8 @@
 package io.socket.spring;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,18 +15,19 @@ import io.socket.parser.IOParser;
 import io.socket.parser.Packet;
 import io.socket.parser.Parser;
 
-public class SocketIoSocket {
-    private static final Logger    log               = LoggerFactory.getLogger(SocketIoSocket.class);
+public class Socket {
+    private static final Logger       log               = LoggerFactory.getLogger(Socket.class);
 
-    private final EngineIoSocket   engineIoSocket;
-    private final SocketIoServer   socketIoServer;
+    private final EngineIoSocket      engineIoSocket;
+    private final SocketIoServer      socketIoServer;
 
-    private SocketIoNamespace      socketIoNamespace = null;
+    private Namespace         socketIoNamespace = null;
+    private Map<Integer, Ack<?>> acks              = new HashMap<>();
 
-    private final IOParser.Decoder decoder           = new IOParser.Decoder();
-    private final IOParser.Encoder encoder           = new IOParser.Encoder();
+    private final IOParser.Decoder    decoder           = new IOParser.Decoder();
+    private final IOParser.Encoder    encoder           = new IOParser.Encoder();
 
-    SocketIoSocket(final EngineIoSocket engineIoSocket, final SocketIoServer socketIoServer) {
+    Socket(final EngineIoSocket engineIoSocket, final SocketIoServer socketIoServer) {
         this.engineIoSocket = engineIoSocket;
         this.socketIoServer = socketIoServer;
 
@@ -37,13 +40,25 @@ public class SocketIoSocket {
                 break;
 
             case Parser.EVENT:
+            case Parser.BINARY_EVENT:
                 try {
+                    if (packet.id >= 0) {
+                        if (acks.containsKey(packet.id)) {
+                            log.debug("need to run ack: {}", acks.get(packet.id).getClass().getSimpleName());
+                        }
+                    }
+
                     JSONArray json = new JSONArray(packet.data.toString());
                     socketIoNamespace.emit(json.get(0).toString(), json.opt(1));
                 }
                 catch (JSONException ex) {
                     log.error("error", ex);
                 }
+                break;
+
+            case Parser.ACK:
+            case Parser.BINARY_ACK:
+                log.debug("{}({})", Parser.types[packet.type], packet.type);
                 break;
 
             default:
@@ -59,7 +74,7 @@ public class SocketIoSocket {
 
         engineIoSocket.once("close", args -> {
             log.info("websocket closed: [{}]", engineIoSocket.getId());
-            
+
             if (socketIoNamespace != null) {
                 socketIoNamespace.disconnect(this);
             }
@@ -73,7 +88,7 @@ public class SocketIoSocket {
     public void connect(final String namespace) {
         log.debug("connect: {} -> {}", getId(), namespace);
 
-        SocketIoNamespace nsp = socketIoServer.getNamespace(namespace);
+        Namespace nsp = socketIoServer.getNamespace(namespace);
 
         if (nsp != null) {
             if (socketIoNamespace != null) {

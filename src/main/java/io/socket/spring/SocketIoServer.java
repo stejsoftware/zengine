@@ -11,17 +11,17 @@ import org.slf4j.LoggerFactory;
 import io.socket.emitter.Emitter;
 import io.socket.engineio.server.EngineIoServer;
 import io.socket.engineio.server.EngineIoSocket;
-import io.socket.spring.annotation.Namespace;
+import io.socket.spring.annotation.Of;
 
 public class SocketIoServer extends Emitter {
-    private static final Logger                  log        = LoggerFactory.getLogger(SocketIoServer.class);
+    private static final Logger          log        = LoggerFactory.getLogger(SocketIoServer.class);
 
-    private final Map<String, SocketIoNamespace> namespaces = new HashMap<>();
+    private final Map<String, Namespace> namespaces = new HashMap<>();
 
     public SocketIoServer(final EngineIoServer server) {
         server.on("connection", sockets -> {
             EngineIoSocket engineIoSocket = (EngineIoSocket) sockets[0];
-            SocketIoSocket socket = new SocketIoSocket(engineIoSocket, this);
+            Socket socket = new Socket(engineIoSocket, this);
 
             log.debug("websocket connection: [{}]", engineIoSocket.getId());
 
@@ -30,11 +30,11 @@ public class SocketIoServer extends Emitter {
         });
     }
 
-    public SocketIoNamespace getNamespace(final String name) {
+    public Namespace getNamespace(final String name) {
         return namespaces.get(name);
     }
 
-    public void addHandler(final Namespace namespace, final String event, final Object bean, final Method method) {
+    public void addHandler(final Of namespace, final String event, final Object bean, final Method method) {
         String namespaceValue = "/";
 
         if (namespace != null) {
@@ -42,7 +42,7 @@ public class SocketIoServer extends Emitter {
         }
 
         if (!namespaces.containsKey(namespaceValue)) {
-            namespaces.put(namespaceValue, new SocketIoNamespace(namespaceValue));
+            namespaces.put(namespaceValue, new Namespace(namespaceValue));
         }
 
         namespaces.get(namespaceValue).addHandler(event, bean, method);

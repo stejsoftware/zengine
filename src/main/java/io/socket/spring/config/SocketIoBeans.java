@@ -22,6 +22,10 @@ public class SocketIoBeans {
         return new SocketIoServer(server);
     }
 
+    public static <T> String toString(List<T> list) {
+        return toString(list.toArray());
+    }
+
     public static <T> String toString(T[] array) {
         StringBuilder sb = new StringBuilder();
 
@@ -31,7 +35,12 @@ public class SocketIoBeans {
             }
 
             if (item != null) {
-                sb.append(item.getClass().getSimpleName());
+                if (item.getClass() == Class.class) {
+                    sb.append(((Class<?>) item).getSimpleName());
+                }
+                else {
+                    sb.append(item.getClass().getSimpleName());
+                }
             }
             else {
                 sb.append("null");
@@ -59,28 +68,5 @@ public class SocketIoBeans {
         }
 
         return new StringBuilder().append(method.getDeclaringClass().getSimpleName()).append('.').append(method.getName()).append("( ").append(sb).append(" ) ").toString();
-    }
-
-    public static String toString(List<Object> list) {
-        return toString(list.toArray());
-    }
-
-    public static <T> String toString(Class<T>[] array) {
-        StringBuilder sb = new StringBuilder();
-
-        for (Class<T> item : array) {
-            if (sb.length() > 0) {
-                sb.append(", ");
-            }
-
-            if (item != null) {
-                sb.append(item.getSimpleName());
-            }
-            else {
-                sb.append("null");
-            }
-        }
-
-        return sb.toString();
     }
 }
