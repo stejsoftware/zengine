@@ -1,0 +1,7 @@
+  _____ __     __  __  __ 
+ |__  / \ \   / / |  \/  |
+   / /   \ \ / /  | |\/| |
+  / /_    \ V /   | |  | |
+ /____|    \_/    |_|  |_|
+  ${AnsiColor.GREEN}Zork Virtual Machine${AnsiColor.DEFAULT}${application.formatted-version}
+  ${AnsiColor.YELLOW}SpringBoot${AnsiColor.DEFAULT}${spring-boot.formatted-version}

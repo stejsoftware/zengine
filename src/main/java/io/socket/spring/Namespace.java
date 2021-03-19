@@ -7,16 +7,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONStringer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.socket.client.Ack;
 import io.socket.emitter.Emitter;
 import io.socket.spring.config.SocketIoBeans;
 
 public class Namespace extends Emitter {
-    private static final Logger        log     = LoggerFactory.getLogger(Namespace.class);
-    private final List<Socket> sockets = new ArrayList<>();
-    private final String               name;
+    private static final Logger log     = LoggerFactory.getLogger(Namespace.class);
+    private final List<Socket>  sockets = new ArrayList<>();
+    private final String        name;
 
     public Namespace(String name) {
         this.name = name;
@@ -48,16 +52,37 @@ public class Namespace extends Emitter {
                             arg = socket;
                         }
                         else if (param.getType() == Ack.class) {
-                            arg = new Ack<>();
+                            log.debug("get ack: {}", socket);
+                            arg = (Ack) ack -> {
+                                log.debug("callback: {}", JSONStringer.valueToString(ack));
+                            };
                         }
                         else {
                             for (Object eventArg : eventArgList) {
-                                if (eventArg != null) {
+                                if (eventArg != null && arg == null) {
                                     if (eventArg.getClass() == param.getType()) {
                                         arg = eventArg;
                                     }
                                 }
                             }
+
+                            // convert any java native types to JSON
+                            if (arg == null) {
+                                for (Object eventArg : eventArgList) {
+                                    if (eventArg != null && arg == null) {
+                                        if (eventArg.getClass() == JSONObject.class) {
+                                            arg = ((JSONObject) eventArg).toMap();
+                                        }
+                                        else if (eventArg.getClass() == JSONArray.class) {
+                                            arg = ((JSONArray) eventArg).toList();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (arg == null) {
+                            log.error("*** Error: no suitable argument for param {}", param);
                         }
 
                         args.add(arg);
@@ -85,4 +110,5 @@ public class Namespace extends Emitter {
         log.debug("disconnect: {} -> {}", socketIoSocket.getId(), this.name);
         sockets.remove(socketIoSocket);
     }
+
 }

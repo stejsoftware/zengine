@@ -22,4 +22,9 @@ public class MainController {
     public String zvm() {
         return "zvm";
     }
+
+    @RequestMapping("/zvm2")
+    public String zvm2() {
+        return "zvm2";
+    }
 }

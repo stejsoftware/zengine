@@ -23,7 +23,7 @@ public class ZEngineController {
     ZUserInterfaceImpl ui;
 
     @Autowired
-    ZCPU cpu;
+    ZCPU               cpu;
 
     @GetMapping(produces = "application/json")
     public Response index() {

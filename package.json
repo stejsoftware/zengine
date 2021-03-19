@@ -2,6 +2,9 @@
   "name": "zengine",
   "version": "0.1.0",
   "description": "Fronend to the Zmachine",
+  "engines": {
+    "node": "10.23.3"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stejsoftware/zengine.git"
@@ -9,7 +12,10 @@
   "author": "Jonathan Meyer",
   "license": "ISC",
   "dependencies": {
+    "async-javascript-terminal": "^2.0.5",
+    "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.4.1",
+    "express": "^4.17.1",
     "javascript-terminal": "^1.0.3",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1",
@@ -18,12 +24,16 @@
     "react-dom": "^16.5.2",
     "react-terminal-component": "^1.4.1",
     "rest": "^1.3.1",
+    "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "yargs": "^15.3.1"
   },
   "scripts": {
     "build": "webpack",
-    "start:dev": "webpack --watch -d --output ./target/classes/static/built/bundle.js"
+    "start:broker": "node ./src/main/js/broker.js",
+    "start:dev": "webpack --watch -d --output ./target/classes/static/built/bundle.js",
+    "test:server": "node ./src/test/js/socket-io-test.js",
+    "test": "npm run test:server"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
@@ -31,6 +41,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.2",
     "css-loader": "^3.5.3",
+    "react-terminal": "^1.0.11",
     "style-loader": "^1.2.1",
     "webpack": "^4.19.1",
     "webpack-cli": "^3.1.0"

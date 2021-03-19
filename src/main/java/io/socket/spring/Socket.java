@@ -10,22 +10,23 @@ import org.json.JSONStringer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.socket.client.Ack;
 import io.socket.engineio.server.EngineIoSocket;
 import io.socket.parser.IOParser;
 import io.socket.parser.Packet;
 import io.socket.parser.Parser;
 
 public class Socket {
-    private static final Logger       log               = LoggerFactory.getLogger(Socket.class);
+    private static final Logger    log               = LoggerFactory.getLogger(Socket.class);
 
-    private final EngineIoSocket      engineIoSocket;
-    private final SocketIoServer      socketIoServer;
+    private final EngineIoSocket   engineIoSocket;
+    private final SocketIoServer   socketIoServer;
 
-    private Namespace         socketIoNamespace = null;
-    private Map<Integer, Ack<?>> acks              = new HashMap<>();
+    private Namespace              socketIoNamespace = null;
+    private Map<Integer, Ack>      acks              = new HashMap<>();
 
-    private final IOParser.Decoder    decoder           = new IOParser.Decoder();
-    private final IOParser.Encoder    encoder           = new IOParser.Encoder();
+    private final IOParser.Decoder decoder           = new IOParser.Decoder();
+    private final IOParser.Encoder encoder           = new IOParser.Encoder();
 
     Socket(final EngineIoSocket engineIoSocket, final SocketIoServer socketIoServer) {
         this.engineIoSocket = engineIoSocket;
@@ -39,26 +40,18 @@ public class Socket {
                 connect(packet.nsp);
                 break;
 
+            case Parser.DISCONNECT:
+                disconnect(packet.nsp);
+                break;
+
             case Parser.EVENT:
             case Parser.BINARY_EVENT:
-                try {
-                    if (packet.id >= 0) {
-                        if (acks.containsKey(packet.id)) {
-                            log.debug("need to run ack: {}", acks.get(packet.id).getClass().getSimpleName());
-                        }
-                    }
-
-                    JSONArray json = new JSONArray(packet.data.toString());
-                    socketIoNamespace.emit(json.get(0).toString(), json.opt(1));
-                }
-                catch (JSONException ex) {
-                    log.error("error", ex);
-                }
+                event((Packet<?>) packet);
                 break;
 
             case Parser.ACK:
             case Parser.BINARY_ACK:
-                log.debug("{}({})", Parser.types[packet.type], packet.type);
+                ack((Packet<?>) packet);
                 break;
 
             default:
@@ -93,8 +86,6 @@ public class Socket {
         if (nsp != null) {
             if (socketIoNamespace != null) {
                 socketIoNamespace.disconnect(this);
-
-                // packet(Parser.DISCONNECT);
             }
 
             socketIoNamespace = nsp;
@@ -109,8 +100,37 @@ public class Socket {
         }
     }
 
+    public void disconnect(final String namespace) {
+
+    }
+
+    public <T> void event(final Packet<T> packet) {
+        try {
+            if (packet.id >= 0) {
+                log.debug("packet.id: {}", packet.id);
+
+                // create an ack callback
+                acks.put(packet.id, ack -> {
+                    log.debug("callback: {}", JSONStringer.valueToString(ack));
+                });
+            }
+
+        }
+        catch (JSONException ex) {
+            log.error("error", ex);
+        }
+    }
+
+    public <T> void ack(final Packet<T> packet) {
+
+    }
+
     public void emit(String event, Object data) {
         packet(Parser.EVENT, socketIoNamespace.getName(), Arrays.asList(event, data));
+    }
+
+    public void emit(String event, Ack ack) {
+
     }
 
     void packet(int type) {

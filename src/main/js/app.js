@@ -1,9 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import 'babel-polyfill';
+
 import Container from "react-bootstrap/Container";
 
-import Zvm from "./Zvm";
+import Zvm from "./Zio";
 
 import "bootstrap/dist/css/bootstrap.css";
 

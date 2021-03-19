@@ -30,18 +30,23 @@ function Zvm() {
       history: History.create(),
       outputs: Outputs.create(),
       commandMapping: CommandMapping.create({
+        foo: {
+          function: () => {
+            return {
+              output: OutputFactory.makeTextOutput(
+                JSON.stringify({ bar: Date.now() })
+              ),
+            };
+          },
+          optDef: {},
+        },
         list: {
           function: (state, opts) => {
-            return new Promise((resolve, reject) => {
-              socket
-                .once("story_list", (data) => {
-                  console.log({ data });
-                  resolve({
-                    output: OutputFactory.makeTextOutput(JSON.stringify(opts)),
-                  });
-                })
-                .emit("list");
+            socket.emit("list", ...opts, (list) => {
+              console.log(list);
             });
+
+            return { output: OutputFactory.makeTextOutput("list") };
           },
           optDef: {},
         },
@@ -53,6 +58,9 @@ function Zvm() {
     socket
       .on("connect", () => {
         setConnected(true);
+        socket.emit("list", (list) => {
+          console.log(list);
+        });
       })
       .on("disconnect", () => {
         setConnected(false);
