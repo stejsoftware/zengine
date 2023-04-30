@@ -3,22 +3,20 @@
  */
 package com.stejsoftware.zengine;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-
+import com.zaxsoft.zmachine.ZCPU;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.zaxsoft.zmachine.ZCPU;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 /**
  * @author jon
  */
 
+@Slf4j
 public class ZEngineTests {
-    private static final Logger LOG = LoggerFactory.getLogger(ZEngineTests.class);
 
     @Test
     @Disabled
@@ -32,7 +30,7 @@ public class ZEngineTests {
         assertThat(cpu.start(), is(true));
         assertThat(cpu.is_running(), is(true));
 
-        LOG.info("cpu");
+        log.info("cpu");
 
         cpu.stop();
 

@@ -21,6 +21,8 @@
  */
 package com.zaxsoft.zmachine;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -33,9 +35,6 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * The ZCPU class implements the Central Processing Unit of a ZMachine, and is
  * the ZMachine's interface to the outside world. With the assistance of other
@@ -45,6 +44,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Matt Kimmel
  */
+
+@Slf4j
 public class ZCPU extends Object implements Runnable
 {
     // Private constants
@@ -4006,8 +4007,6 @@ public class ZCPU extends Object implements Runnable
     {
         zui.fatal("PICTURE_TABLE instruction unimplemented");
     }
-
-    private static Logger log = LoggerFactory.getLogger(ZCPU.class);
 
     private String opcodeTypeToString(int opcodeType)
     {
