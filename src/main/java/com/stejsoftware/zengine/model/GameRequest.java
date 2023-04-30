@@ -4,5 +4,5 @@ import lombok.Builder;
 
 @Builder
 public class GameRequest {
-	String storyFile;
+	private String storyFile;
 }
