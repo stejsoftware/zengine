@@ -34,7 +34,8 @@ public class ZEngine {
 		Game newGame = null;
 
 		try {
-			File story = new ClassPathResource(config.getStoryFolder() + "/" + game.getStoryFile()).getFile();
+			File story = new ClassPathResource(config.getStoryFolder() + "/" + game
+					.getStoryFile()).getFile();
 			newGame = games.add(ZGame.init(story)).toGame();
 		}
 		catch (IOException e) {

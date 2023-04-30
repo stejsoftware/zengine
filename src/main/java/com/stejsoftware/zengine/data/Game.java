@@ -1,6 +1,7 @@
 package com.stejsoftware.zengine.data;
 
 import lombok.Builder;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import java.io.File;
 
 @Entity
 @Builder
+@Data
 public class Game {
     @Id
     @GeneratedValue

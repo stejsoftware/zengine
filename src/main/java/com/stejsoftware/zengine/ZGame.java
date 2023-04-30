@@ -7,6 +7,7 @@ import com.stejsoftware.zengine.zmachine.ProgramCounter;
 import com.stejsoftware.zengine.zmachine.Stack;
 import com.zaxsoft.zmachine.ZCPU;
 import com.zaxsoft.zmachine.ZUserInterface;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
