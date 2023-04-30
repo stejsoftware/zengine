@@ -2,10 +2,8 @@ package com.stejsoftware.zengine;
 
 import com.stejsoftware.zengine.controller.ControllerConfig;
 import com.stejsoftware.zengine.data.Game;
-import com.stejsoftware.zengine.data.Move;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.stejsoftware.zengine.model.Move;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -13,16 +11,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 public class ZEngine {
+	private final ZGames games;
+	private final ControllerConfig config;
 
-	private static final Logger LOG = LoggerFactory.getLogger(ZEngine.class);
-
-	@Autowired
-	private ZGames games;
-
-	@Autowired
-	private ControllerConfig config;
+	public ZEngine(ZGames games, ControllerConfig config) {
+		this.games = games;
+		this.config = config;
+	}
 
 	public List<Game> listGames() {
 		return games.list();
@@ -36,11 +34,11 @@ public class ZEngine {
 		Game newGame = null;
 
 		try {
-			File story = new ClassPathResource(config.storyFolder + "/" + game.getStoryFile()).getFile();
+			File story = new ClassPathResource(config.getStoryFolder() + "/" + game.getStoryFile()).getFile();
 			newGame = games.add(ZGame.init(story)).toGame();
 		}
 		catch (IOException e) {
-			LOG.error("error", e);
+			log.error("error", e);
 		}
 
 		return newGame;

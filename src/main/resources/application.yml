@@ -1,13 +1,26 @@
 logging:
-    level:
-        web: DEBUG
+  level:
+    web: DEBUG
 
 spring:
-    profiles.active: local
-    data:
-        mongodb:
-            uri: mongodb+srv://set.with.mongodb.com
+  profiles:
+    active: local
+
+  data:
+    rest:
+      base-path: /api
+    mongodb:
+      uri: mongodb+srv://set.with.mongodb.com
+
+  security:
+    user:
+      name: root
+      password: abc123
+      roles: admin
+
+  thymeleaf:
+    prefix: classpath:/static/
 
 zengine:
-    story:
-        folder: /stories
+  story:
+    folder: /stories

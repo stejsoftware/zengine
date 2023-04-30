@@ -1,76 +1,68 @@
 package com.stejsoftware.zengine.controller;
 
+import com.stejsoftware.zengine.Utility;
 import com.stejsoftware.zengine.ZEngine;
 import com.stejsoftware.zengine.data.Game;
-import com.stejsoftware.zengine.data.Move;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.stejsoftware.zengine.model.Move;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.RequestEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/v0")
 public class ZEngineRestController {
-	private static final Logger LOG = LoggerFactory.getLogger(ZEngineRestController.class);
+    private final ZEngine engine;
+    private final ControllerConfig config;
 
-	@Autowired
-	private ZEngine engine;
+    public ZEngineRestController(ZEngine engine, ControllerConfig config) {
+        this.engine = engine;
+        this.config = config;
+    }
 
-	@Autowired
-	private ControllerConfig config;
+    @GetMapping(value = "/stories")
+    public List<Map<String, String>> stories(RequestEntity<String> request) {
+        List<Map<String, String>> stories = new ArrayList<>();
 
-	@GetMapping(value = "/stories")
-	public List<Map<String, String>> stories(RequestEntity<String> request) {
-		List<Map<String, String>> stories = new ArrayList<>();
+        for (File story : Utility.getStories(config.getStoryFolder())) {
+            stories.add(Map.of("name", story.getName()));
+        }
 
-		for (File story : Utility.getStories(config.storyFolder)) {
-			stories.add(new HashMap<String, String>() {{
-				put("name", story.getName());
-			}});
-		}
+        return stories;
+    }
 
-		return stories;
-	}
+    @GetMapping(value = "/games")
+    public List<Game> listGames() {
+        return engine.listGames();
+    }
 
-	@GetMapping(value = "/games")
-	public List<Game> listGames() {
-		return engine.listGames();
-	}
+    @PostMapping(value = "/games")
+    public Game startGame(@RequestBody Game game) {
+        return engine.startGame(game);
+    }
 
-	@PostMapping(value = "/games")
-	public Game startGame(@RequestBody Game game) {
-		return engine.startGame(game);
-	}
+    @GetMapping(value = "/games/{gameId}")
+    public Game getGame(@PathVariable String gameId) {
+        return engine.getGame(gameId);
+    }
 
-	@GetMapping(value = "/games/{gameId}")
-	public Game getGame(@PathVariable String gameId) {
-		return engine.getGame(gameId);
-	}
+    @GetMapping(value = "/games/{gameId}/moves")
+    public List<Move> listMoves(@PathVariable String gameId) {
+        return engine.listMoves(gameId);
+    }
 
-	@GetMapping(value = "/games/{gameId}/moves")
-	public List<Move> listMoves(@PathVariable String gameId) {
-		return engine.listMoves(gameId);
-	}
+    @PostMapping(value = "/games/{gameId}/moves")
+    public Move executeMove(@PathVariable String gameId, @RequestBody Move move) {
+        return engine.executeMove(gameId, move);
+    }
 
-	@PostMapping(value = "/games/{gameId}/moves")
-	public Move executeMove(@PathVariable String gameId, @RequestBody Move move) {
-		return engine.executeMove(gameId, move);
-	}
-
-	@GetMapping(value = "/games/{gameId}/moves/{moveId}")
-	public Move getMove(@PathVariable String gameId, @PathVariable String moveId) {
-		return engine.getMove(gameId, moveId);
-	}
+    @GetMapping(value = "/games/{gameId}/moves/{moveId}")
+    public Move getMove(@PathVariable String gameId, @PathVariable String moveId) {
+        return engine.getMove(gameId, moveId);
+    }
 }

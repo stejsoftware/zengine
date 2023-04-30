@@ -407,7 +407,7 @@ public class ZCPU extends Object implements Runnable
                 Vector<Integer> terminators = new Vector<Integer>();
                 while( tc != 0 )
                 {
-                    terminators.addElement(new Integer(tc));
+                    terminators.addElement(Integer.valueOf(tc));
                     i++;
                     tc = memory.fetchByte(termChars + i);
                 }
@@ -1578,16 +1578,16 @@ public class ZCPU extends Object implements Runnable
             {
                 if( Character.isLowerCase(curchar) )
                 { // Alphabet L
-                    outbuf.addElement(new Integer(((int) ((curchar - 'a') + 6))));
+                    outbuf.addElement(Integer.valueOf(((int) ((curchar - 'a') + 6))));
                     continue;
                 }
                 else if( Character.isUpperCase(curchar) )
                 {
                     if( version < 3 )
-                        outbuf.addElement(new Integer(2));
+                        outbuf.addElement(Integer.valueOf(2));
                     else
-                        outbuf.addElement(new Integer(4));
-                    outbuf.addElement(new Integer(((int) ((curchar - 'A') + 6))));
+                        outbuf.addElement(Integer.valueOf(4));
+                    outbuf.addElement(Integer.valueOf(((int) ((curchar - 'A') + 6))));
                     continue;
                 }
             }
@@ -1597,16 +1597,16 @@ public class ZCPU extends Object implements Runnable
             {
                 if( version == 1 )
                 { // Only needs one character in V1
-                    outbuf.addElement(new Integer(1));
+                    outbuf.addElement(Integer.valueOf(1));
                     continue;
                 }
 
                 // Otherwise, two bytes are needed.
                 if( version < 3 )
-                    outbuf.addElement(new Integer(3));
+                    outbuf.addElement(Integer.valueOf(3));
                 else
-                    outbuf.addElement(new Integer(5));
-                outbuf.addElement(new Integer(7));
+                    outbuf.addElement(Integer.valueOf(5));
+                outbuf.addElement(Integer.valueOf(7));
                 continue;
             }
 
@@ -1617,25 +1617,25 @@ public class ZCPU extends Object implements Runnable
             {
                 if( alphabet[alphabetL][i] == curchar )
                 {
-                    outbuf.addElement(new Integer(i));
+                    outbuf.addElement(Integer.valueOf(i));
                     found = true;
                 }
                 else if( alphabet[alphabetU][i] == curchar )
                 {
                     if( version < 3 )
-                        outbuf.addElement(new Integer(2));
+                        outbuf.addElement(Integer.valueOf(2));
                     else
-                        outbuf.addElement(new Integer(4));
-                    outbuf.addElement(new Integer(i));
+                        outbuf.addElement(Integer.valueOf(4));
+                    outbuf.addElement(Integer.valueOf(i));
                     found = true;
                 }
                 else if( alphabet[alphabetP][i] == curchar )
                 {
                     if( version < 3 )
-                        outbuf.addElement(new Integer(3));
+                        outbuf.addElement( Integer.valueOf(3));
                     else
-                        outbuf.addElement(new Integer(5));
-                    outbuf.addElement(new Integer(i));
+                        outbuf.addElement(Integer.valueOf(5));
+                    outbuf.addElement(Integer.valueOf(i));
                     found = true;
                 }
             }
@@ -1645,14 +1645,14 @@ public class ZCPU extends Object implements Runnable
             if( found ) continue;
 
             if( version < 3 ) // Shift to alphabetP
-                outbuf.addElement(new Integer(3));
+                outbuf.addElement(Integer.valueOf(3));
             else
-                outbuf.addElement(new Integer(5));
-            outbuf.addElement(new Integer(6)); // Literal escape
-            outbuf.addElement(new Integer(((((int) curchar) >> 5) & 0x1f))); // Top
+                outbuf.addElement(Integer.valueOf(5));
+            outbuf.addElement(Integer.valueOf(6)); // Literal escape
+            outbuf.addElement(Integer.valueOf(((((int) curchar) >> 5) & 0x1f))); // Top
                                                                              // 5
                                                                              // bits
-            outbuf.addElement(new Integer(((int) curchar) & 0x1f)); // Bottom 5
+            outbuf.addElement(Integer.valueOf(((int) curchar) & 0x1f)); // Bottom 5
                                                                     // bits
         }
 
@@ -1696,7 +1696,7 @@ public class ZCPU extends Object implements Runnable
         value = value & 0xffff;
         if( v == 0 )
         { // Push this value onto the routine stack
-            Integer i = new Integer(value);
+            Integer i = Integer.valueOf(value);
             curCallFrame.routineStack.push(i);
         }
         else if( (v >= 1) && (v <= 15) ) // Local variable
@@ -1942,7 +1942,7 @@ public class ZCPU extends Object implements Runnable
         // Get the elements
         for( i = 0; i < nelements; i++ )
         {
-            tmp = new Integer(dis.readInt());
+            tmp = Integer.valueOf(dis.readInt());
             st.push(tmp);
         }
     }

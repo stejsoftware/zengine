@@ -1,129 +1,147 @@
 package com.zaxsoft.zmachine;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.WorkQueueProcessor;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
+@Slf4j
 public class ZMachineTests {
-    private static final Logger LOG = LoggerFactory.getLogger(ZMachineTests.class);
     boolean done = false;
     private File storyFile;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    public void setup() throws IOException {
+        String testStoryFile = "stories/minizork.z3";
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("minizork.z3").getFile());
-        LOG.info("{}", file.getAbsolutePath());
-        storyFile = file;
+        URL url = classLoader.getResource(testStoryFile);
 
-        System.setIn(new ByteArrayInputStream("quit\r\ny\r\n".getBytes()));
+        if (url != null) {
+            File file = new File(url.getFile());
+
+            log.info("{}", file.getAbsolutePath());
+            storyFile = file;
+
+            System.setIn(new ByteArrayInputStream("quit\r\ny\r\n".getBytes()));
+        } else {
+            fail(String.format("Test Story Not Found: %s", testStoryFile));
+        }
     }
 
-    @After
+    @AfterEach
     public void teardown() {
         System.setIn(System.in);
     }
 
     @Test
     public void test01() {
-        Flux<String> bridge = WorkQueueProcessor.create(sink -> {
-            ZCPU cpu = new ZCPU(new ZMachineTestInterface() {
-                @Override
-                public int readLine(StringBuffer sb, int time) {
-                    Scanner scanner = new Scanner(System.in);
-                    sb.append(scanner.nextLine());
-                    return 0;
-                }
+        Flux.create(sink -> {
+                    try (Scanner scanner = new Scanner(System.in)) {
+                        ZCPU cpu = new ZCPU(new ZMachineTestInterface() {
+                            @Override
+                            public int readLine(StringBuffer sb, int time) {
+                                try {
+                                    sb.append(scanner.nextLine());
+                                } catch (NoSuchElementException ex) {
+                                    log.error("error:", ex);
+                                }
 
-                @Override
-                public int readChar(int time) {
-                    return 0;
-                }
+                                return '\n';
+                            }
 
-                @Override
-                public void showString(String s) {
-                    sink.next(s);
-                }
+                            @Override
+                            public int readChar(int time) {
+                                return '\n';
+                            }
 
-                @Override
-                public void showStatusBar(String s, int a, int b, boolean flag) {
-                    sink.next(String.format("%s %d %d %s", s, a, b, flag ? "T" : "F"));
-                }
+                            @Override
+                            public void showString(String s) {
+                                sink.next(s);
+                            }
 
-                @Override
-                public void quit() {
-                    sink.complete();
-                }
-            });
+                            @Override
+                            public void showStatusBar(String s, int a, int b, boolean flag) {
+                                sink.next(String.format("%s %d %d %s", s, a, b, flag ? "T" : "F"));
+                            }
 
-            sink.onRequest(s -> {
-                cpu.initialize(storyFile.getAbsolutePath());
-                cpu.start();
+                            @Override
+                            public void quit() {
+                                done = true;
+                                sink.complete();
+                                log.info("quit()");
+                            }
+                        });
 
-                while (cpu.is_running() && !sink.isCancelled()) {
+                        sink.onRequest(consumer -> {
+                            cpu.initialize(storyFile.getAbsolutePath());
+                            cpu.start();
 
-                }
-            });
-        });
+                            log.info("consumer: {}", consumer);
 
-        bridge
-                .doOnError(e -> LOG.error("Error: ", e))
-                .doOnComplete(() -> LOG.info("onDone"))
+                            while (cpu.is_running() && !sink.isCancelled() && !done) {
+                                Thread.yield();
+                            }
+                        });
+                    }
+                })
+                .doOnError(e -> log.error("Error: ", e))
+                .doOnComplete(() -> log.info("onComplete"))
                 .subscribe(System.out::print);
     }
 
     @Test
     public void test02() {
         Flux.create(sink -> {
-            Scanner scanner = new Scanner(System.in);
+            try (Scanner scanner = new Scanner(System.in)) {
+                ZCPU cpu = new ZCPU(new ZMachineTestInterface() {
+                    @Override
+                    public void showStatusBar(String s, int a, int b, boolean flag) {
+                        sink.next(String.format("%s (%d, %d)\n", s, a, b));
+                    }
 
-            ZCPU cpu = new ZCPU(new ZMachineTestInterface() {
-                @Override
-                public void showStatusBar(String s, int a, int b, boolean flag) {
-                    sink.next(String.format("%s (%d, %d)\n", s, a, b));
-                }
+                    @Override
+                    public int readLine(StringBuffer sb, int time) {
+                        sb.append(scanner.nextLine());
+                        return 0;
+                    }
 
-                @Override
-                public int readLine(StringBuffer sb, int time) {
-                    sb.append(scanner.nextLine());
-                    return 0;
-                }
+                    @Override
+                    public int readChar(int time) {
+                        return 0;
+                    }
 
-                @Override
-                public int readChar(int time) {
-                    return 0;
-                }
+                    @Override
+                    public void showString(String s) {
+                        sink.next(s);
+                    }
 
-                @Override
-                public void showString(String s) {
-                    sink.next(s);
-                }
+                    @Override
+                    public void quit() {
+                        sink.complete();
+                        done = true;
+                    }
+                });
 
-                @Override
-                public void quit() {
-                    sink.complete();
-                    done = true;
-                }
-            });
+                cpu.initialize(storyFile.getAbsolutePath());
+                cpu.start();
 
-            cpu.initialize(storyFile.getAbsolutePath());
-            cpu.start();
-
-            while (cpu.is_running()) {
-                if (done) {
-                    cpu.stop();
+                while (cpu.is_running()) {
+                    if (done) {
+                        cpu.stop();
+                    }
                 }
             }
 
         }).subscribe(System.out::print);
     }
-
 }

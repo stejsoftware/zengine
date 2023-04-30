@@ -1,24 +1,24 @@
 package com.zaxsoft.zmachine;
 
-import org.reactivestreams.Publisher;
-import org.reactivestreams.Subscriber;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ZMessageProcessor implements Publisher<ZMessage> {
-    private static final Logger LOG = LoggerFactory.getLogger(ZMessageProcessor.class);
 
-    private static ZMessageListener zMessageListener;
+    private static ZMessageListener<ZMessage> zMessageListener;
 
-    public static void register(ZMessageListener listener) {
-        LOG.info("register");
+    public static void register(ZMessageListener<ZMessage> listener) {
+        log.info("register");
         zMessageListener = listener;
     }
 
     public static void start(File story) {
-        LOG.info("start: ", story.getAbsolutePath());
+        log.info("start: ", story.getAbsolutePath());
 
         ZCPU zcpu = new ZCPU(new ZMachineTestInterface() {
             @Override
@@ -49,7 +49,8 @@ public class ZMessageProcessor implements Publisher<ZMessage> {
         zcpu.initialize(story.getAbsolutePath());
 
         if (zcpu.start()) {
-            while (zcpu.is_running()) ;
+            while (zcpu.is_running())
+                ;
             zMessageListener.onDone();
         } else {
             throw new ZException("Did not start.");

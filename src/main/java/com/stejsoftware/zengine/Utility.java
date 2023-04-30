@@ -1,17 +1,20 @@
-package com.stejsoftware.zengine.controller;
+package com.stejsoftware.zengine;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.RequestEntity;
 
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
+@Slf4j
 public class Utility {
-	private static final Logger LOG = LoggerFactory.getLogger(Utility.class);
+	private Utility() {
+	}
 
 	public static String getRootURL(RequestEntity<String> request) {
 		URI url = request.getUrl();
@@ -28,15 +31,10 @@ public class Utility {
 
 		try {
 			File folder = new ClassPathResource(storyFolder).getFile();
-
-			if (folder != null) {
-				for (File file : folder.listFiles()) {
-					stories.add(file);
-				}
-			}
+			Collections.addAll(stories, Objects.requireNonNull(folder.listFiles()));
 		}
 		catch (Exception ex) {
-			LOG.error("error:", ex);
+			log.error("error:", ex);
 		}
 
 		return stories;

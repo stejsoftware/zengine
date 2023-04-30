@@ -3,14 +3,15 @@
  */
 package com.stejsoftware.zengine;
 
-import com.zaxsoft.zmachine.ZCPU;
-import org.junit.Test;
-import org.junit.Ignore;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import com.zaxsoft.zmachine.ZCPU;
 
 /**
  * @author jon
@@ -20,7 +21,7 @@ public class ZEngineTests {
     private static final Logger LOG = LoggerFactory.getLogger(ZEngineTests.class);
 
     @Test
-    @Ignore
+    @Disabled
     public void cpuTest() {
         ZCPU cpu = new ZCPU(new ZUserInterfaceImpl());
 

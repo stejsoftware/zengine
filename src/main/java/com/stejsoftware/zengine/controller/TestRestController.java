@@ -1,37 +1,32 @@
 package com.stejsoftware.zengine.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+import com.stejsoftware.zengine.Utility;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/test")
 public class TestRestController {
-	private static Logger LOG = LoggerFactory.getLogger(TestRestController.class);
+	private final ControllerConfig controllerConfig;
 
-	@Autowired
-	private ControllerConfig config;
+	public TestRestController(ControllerConfig controllerConfig) {
+		this.controllerConfig = controllerConfig;
+	}
 
 	@GetMapping("/foo")
 	public List<String> foo(RequestEntity<String> request) {
 		String root = Utility.getRootURL(request);
-
-		return Arrays.asList(root + "/foo", root + "/bar");
+		return List.of(root + "/foo", root + "/bar");
 	}
 
 	@GetMapping("/stories")
-	public String stories() throws IOException {
-
-		return "error";
+	public String stories() {
+		return controllerConfig.getStoryFolder();
 	}
 }

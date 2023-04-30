@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
+<head>
     <title th:text="${title}"></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="/style.css" type="text/css" />
-  </head>
-  <body>
-    <div th:replace="header :: title"></div>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--    <link rel="stylesheet" href="/style.css" type="text/css" />-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:replace="header :: title"></div>
 
-    <div class="content">
-      <ul>
-        <li><a th:href="@{/stories}">Stories</a></li>
-      </ul>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+        </div>
     </div>
+</div>
 
-    <div th:replace="footer :: copy"></div>
-  </body>
+<div th:replace="footer :: copy"></div>
+</body>
 </html>
